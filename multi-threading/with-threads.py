@@ -11,7 +11,7 @@ class testit(Thread):
       self.status = -1
       
    def run(self):
-      pingaling = os.popen("ping -q -c2 " + self.ip, "r")
+      pingaling = os.popen("ping -q -c2 " + self.ip, 'r')
       while 1:
         line = pingaling.readline()
         if not line: break

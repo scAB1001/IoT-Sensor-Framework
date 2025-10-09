@@ -11,7 +11,7 @@ post_report=[0, 0, 0]
 for host in range(1,49):
 #   ip = "129.11.146."+str(host)
    ip = "90.194.19." + str(host)
-   pingaling = os.popen("ping -q -c2 " + ip, "r")
+   pingaling = os.popen("ping -q -c2 " + ip, 'r')
    print ("Testing ", ip, sys.stdout.flush(), end=" -> ")
    
    while 1:
@@ -33,5 +33,5 @@ for host in range(1,49):
 stop=time()
 elapsed = stop - start
 
-print (f"Time elapsed {elapsed} - done.")
-print(f"{report[0]}({post_report[0]} {report[1]}({post_report[1]} {report[2]}({post_report[2]})")
+print (f"\nTime elapsed {elapsed} - done.")
+print(f"{report[0]}({post_report[0]}), {report[1]}({post_report[1]}), {report[2]}({post_report[2]})")

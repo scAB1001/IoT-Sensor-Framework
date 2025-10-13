@@ -19,8 +19,7 @@ public class EchoClient {
             // create socket
             echoSocket = new Socket(serverHostname, 5000);
             out = new PrintWriter(echoSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(
-                                        echoSocket.getInputStream()));
+            in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host: " + serverHostname);
             System.exit(1);
@@ -30,11 +29,10 @@ public class EchoClient {
             System.exit(1);
         }
 
-	BufferedReader stdIn = new BufferedReader(
-                                   new InputStreamReader(System.in));
+	BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 	String userInput;
 
-        System.out.print ("input: ");
+    System.out.print ("input: ");
 	while ((userInput = stdIn.readLine()) != null) {
 	    out.println(userInput);
 	    System.out.println("echo: " + in.readLine());

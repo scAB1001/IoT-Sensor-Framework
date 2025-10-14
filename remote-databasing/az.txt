@@ -1,0 +1,14 @@
+Resource group: myFreeDBResourceGroup
+
+Database name: myFreeDB.
+
+Server:
+    Server name: myfreesqldbserver-sc222ab
+    Authentication method: Use both SQL and Microsoft Entra authentication.
+    Microsoft Entra Admin: 
+        sc222ab@leeds.ac.uk
+        Admin Object/App ID: a3e81b56-1d8b-4e93-95d8-390776b1891a
+    Server admin login: sc222ab
+    Password: Si_J3tai's--riche
+    Location: (Europe) UK-South
+

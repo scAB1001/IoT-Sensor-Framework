@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include "mpi.h"
+
 main(int argc, char** argv)
 {
    int noprocs, nid;
@@ -18,7 +19,7 @@ main(int argc, char** argv)
 
    MPI_Get_processor_name( processorname, &namelen );
         
-   printf("Hello from processor %i of %i running on machine %s\n",nid,noprocs,processorname);
+   printf("Hello from processor %i of %i running on machine %s\n", nid, noprocs, processorname);
 
    fflush(stdout);
 

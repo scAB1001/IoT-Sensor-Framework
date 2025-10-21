@@ -36,10 +36,32 @@ public class CreateDB {
 
   public static Connection getConnection() throws IOException, SQLException
   {
-    
     // Obtain access parameters and use them to create connection
-    //
-    //
+    Properties p = new Properties();
+    p.load(new FileInputStream("config.properties"));
+
+    String serverName = p.getProperty("db.server");
+    String databaseName = p.getProperty("db.database");
+    String username = p.getProperty("db.username");
+    String password = p.getProperty("db.password");
+    String certificate = p.getProperty("db.certificate");
+
+    // JDBC connection string for Azure SQL Database
+    String connectionUrl = String.format(
+        "jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;" + 
+        "trustServerCertificate=false;hostNameInCertificate=*%s;loginTimeout=30;",
+        serverName, databaseName, username, password, certificate);
+    
+    // Load JDBC driver
+    try {
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    } catch (ClassNotFoundException e) {
+        throw new SQLException("JDBC Driver not found", e);
+    }
+
+    // Establish connection
+    Connection connection = null;
+    connection = DriverManager.getConnection(connectionUrl);
 
     return connection;
   }

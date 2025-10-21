@@ -1,4 +1,5 @@
-Resource group: myFreeDBResourceGroup
+Subscription: UoL-Teaching-SOC-MCC
+Resource group: uol_feps_soc_comp_3211_<username>, e.g. uol_feps_soc_comp_3211_sc23xyz
 
 Database name: myFreeDB.
 

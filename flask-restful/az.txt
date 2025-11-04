@@ -1,0 +1,29 @@
+Subscription: UoL-Teaching-SOC-MCC
+Resource group: uol_feps_soc_comp_3211_sc222ab, e.g. uol_feps_soc_comp_3211_sc23xyz
+
+
+VM:
+    Name: ubuntu-vm-flask
+    Region: UK South
+    Availability zone: Zone 1
+    Image: Ubuntu Server 22.04 LTS - x64 Gen2
+    Arch.: x64
+    Size: Standard_B2s - 2 vcpus, 4 GiB memory (£22.56/month)
+    Authentication method: Use both SQL and Microsoft Entra authentication.
+    Server admin login: sc222ab
+    Password: Si_J3tai's--riche
+    Location: (Europe) UK-South
+
+SSH Rule:
+    Source: My IP address (Azure will auto-detect your IP)
+    Source port ranges: *
+    Destination: *
+    Destination port ranges: 22
+    Protocol: TCP
+    Action: Allow
+    Priority: 1000
+    Name: RestrictSSH-To-MyIP
+
+Public IP address:  20.90.147.180
+Private IP address: 172.16.0.4
+

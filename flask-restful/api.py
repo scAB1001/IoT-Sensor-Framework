@@ -56,4 +56,10 @@ api.add_resource(Todo, '/todos/<todo_id>')
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+
+    # Only listen on localhost
+    # app.run(host='127.0.0.1', port=5000, debug=True)
+
+    # Listen on all interfaces (for VM deployment)
+    app.run(host='0.0.0.0', port=5000, debug=True)
+

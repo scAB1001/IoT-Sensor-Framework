@@ -1,1 +1,5 @@
 *.class
+azfunc/local.settings.json
+venv/
+.venv/
+__pycache__/

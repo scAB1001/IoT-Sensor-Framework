@@ -1,40 +1,12 @@
-# import azure.functions as func
-# import logging
-
-# app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
-
-# # Run with func start -p 5000
-# @app.function_name(name="HttpExample")
-# @app.route(route="http_trigger")
-# def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
-#     logging.info('Python HTTP trigger function processed a request.')
-
-#     name = req.params.get('name')
-#     if not name:
-#         try:
-#             req_body = req.get_json()
-#         except ValueError:
-#             pass
-#         else:
-#             name = req_body.get('name')
-
-#     if name:
-#         return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-#     else:
-#         return func.HttpResponse(
-#              "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-#              status_code=200
-#         )
-
 import azure.functions as func
+import json
 from hello_function import handle_hello_request
 from sensor_data_function import handle_sensor_request
+from statistics_function import handle_analytics_request
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 
 # Hello World Function
-
-
 @app.function_name(name="HttpExample")
 @app.route(route="hello")
 def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
@@ -62,3 +34,32 @@ def generate_sensor_data(req: func.HttpRequest) -> func.HttpResponse:
             mimetype="application/json",
             status_code=200
         )
+
+# Statistics Function - Uses sensor data JSON from request body
+# Analytics Function (Task 2) - Processes sensor data with statistics
+
+
+@app.function_name(name="SensorAnalytics")
+@app.route(route="analytics/{sensor_count?}", methods=["GET"])
+def sensor_analytics(req: func.HttpRequest) -> func.HttpResponse:
+    try:
+        # First, get sensor data
+        sensor_count = req.route_params.get('sensor_count', 20)
+        sensor_response = handle_sensor_request(
+            req)  # Reuse the sensor function
+
+        if "error" in sensor_response:
+            return func.HttpResponse(sensor_response, mimetype="application/json", status_code=500)
+
+        # Process analytics on the sensor data
+        analytics_response = handle_analytics_request(sensor_response)
+
+        return func.HttpResponse(
+            analytics_response,
+            mimetype="application/json",
+            status_code=200
+        )
+
+    except Exception as e:
+        error_response = json.dumps({"error": f"Analytics failed: {str(e)}"})
+        return func.HttpResponse(error_response, mimetype="application/json", status_code=500)

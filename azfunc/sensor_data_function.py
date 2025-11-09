@@ -1,63 +1,3 @@
-# import azure.functions as func
-# import json
-# import random
-# # import time
-# import logging
-# from datetime import datetime, timezone
-
-# app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
-
-
-# @app.function_name(name="GenerateSensorData")
-# @app.route(route="sensors", methods=["GET"])
-# @app.route(route="sensors/{sensor_count}", methods=["GET"])
-# def generate_sensor_data(req: func.HttpRequest) -> func.HttpResponse:
-#     logging.info(
-#         'Python HTTP trigger function processed a request for sensor data.')
-
-#     try:
-#         # Get number of sensors (default 20)
-#         sensor_count = int(req.route_params.get('sensor_count', 20))
-
-#         # Generate sensor data
-#         sensor_data = generate_sensor_readings(sensor_count)
-
-#         # Add timestamp
-#         response_data = {
-#             "timestamp": datetime.now(timezone.utc).isoformat(),
-#             "sensor_count": sensor_count,
-#             "sensors": sensor_data
-#         }
-
-#         return func.HttpResponse(
-#             json.dumps(response_data, indent=2),
-#             mimetype="application/json",
-#             status_code=200
-#         )
-
-#     except Exception as e:
-#         return func.HttpResponse(
-#             json.dumps({"error": str(e)}),
-#             mimetype="application/json",
-#             status_code=500
-#         )
-
-
-# def generate_sensor_readings(sensor_count: int) -> list[dict[str, float | int]]:
-#     sensors = []
-
-#     for sensor_id in range(1, sensor_count + 1):
-#         sensor_reading = {
-#             "sensor_id": sensor_id,
-#             "temperature": round(random.uniform(5, 18), 1),  # Celsius
-#             "wind": round(random.uniform(12, 24), 1),        # miles/hour
-#             "humidity": random.randint(30, 60),              # %
-#             "co2": random.randint(400, 1600)                 # ppm
-#         }
-#         sensors.append(sensor_reading)
-
-#     return sensors
-
 import json
 import random
 import logging
@@ -101,10 +41,10 @@ def generate_sensor_readings(sensor_count: int) -> List[Dict[str, Union[float, i
     for sensor_id in range(1, sensor_count + 1):
         sensor_reading = {
             "sensor_id": sensor_id,
-            "temperature": round(random.uniform(5, 18), 1),
-            "wind": round(random.uniform(12, 24), 1),
-            "humidity": random.randint(30, 60),
-            "co2": random.randint(400, 1600)
+            "temperature": round(random.uniform(5, 18), 1), # Temperature in Degrees Celsius
+            "wind_speed": round(random.uniform(12, 24), 1), # Wind speed in Miles per hour (mph)
+            "relative_humidity": random.randint(30, 60), # Relative humidity in percentage (%)
+            "co2_level": random.randint(400, 1600) # CO2 level in parts per million (ppm)
         }
         sensors.append(sensor_reading)
 

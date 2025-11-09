@@ -3,8 +3,11 @@ import json
 from hello_function import handle_hello_request
 from sensor_data_function import handle_sensor_request
 from statistics_function import handle_analytics_request
+from db import create_tables
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
+create_tables()
+
 
 # Hello World Function
 @app.function_name(name="HttpExample")

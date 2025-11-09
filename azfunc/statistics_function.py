@@ -4,6 +4,7 @@ import random
 import logging
 from datetime import datetime, timezone
 from typing import List, Dict, Union
+from SensorData import SensorData
 
 
 def calculate_basic_stats(values: List[float]) -> Dict[str, float]:
@@ -32,18 +33,6 @@ def analyze_sensor_data(sensor_data: List[Dict]) -> Dict[str, Any]:
                                 for sensor in sensor_data]
     co2_levels = [sensor['co2_level'] for sensor in sensor_data]
 
-    # # Calculate per-sensor statistics
-    # per_sensor_stats = []
-    # for sensor in sensor_data:
-    #     sensor_stats = {
-    #         "sensor_id": sensor['sensor_id'],
-    #         "temperature": sensor['temperature'],
-    #         "wind_speed": sensor['wind_speed'],
-    #         "relative_humidity": sensor['relative_humidity'],
-    #         "co2": sensor['co2'],
-    #     }
-    #     per_sensor_stats.append(sensor_stats)
-
     # Calculate overall statistics
     overall_stats = {
         "temperature": calculate_basic_stats(temperatures),
@@ -59,7 +48,10 @@ def analyze_sensor_data(sensor_data: List[Dict]) -> Dict[str, Any]:
 
     return stats
 
-
+def response_data_to_db():
+    # Data in JSON format
+    # Extract
+    pass
 
 def handle_analytics_request(sensor_data_json: str) -> str:
     """
@@ -69,6 +61,18 @@ def handle_analytics_request(sensor_data_json: str) -> str:
         # Parse sensor data
         data = json.loads(sensor_data_json)
         sensors = data.get("sensors", [])
+
+        print(sensors)
+
+        # Store in db
+        # for sensor in sensors:
+        #     sensor_data = SensorData(
+        #         temperature=sensor.get("temperature"),
+        #         wind_speed=sensor.get("wind_speed"),
+        #         relative_humidity=sensor.get("relative_humidity"),
+        #         co2_level=sensor.get("co2_level")
+        #     )
+        #     sensor_data.save()
 
         # Perform analytics
         analytics = analyze_sensor_data(sensors)
@@ -86,3 +90,4 @@ def handle_analytics_request(sensor_data_json: str) -> str:
     except Exception as e:
         logging.error(f"Analytics error: {str(e)}")
         return json.dumps({"error": f"Analytics processing failed: {str(e)}"})
+

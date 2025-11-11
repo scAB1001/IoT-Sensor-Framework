@@ -79,3 +79,5 @@ exec.sh
 
 build
 build.sh
+
+performance_results/

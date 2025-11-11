@@ -1,189 +1,89 @@
-# README
-
-## How to
-
 https://github.com/MichealNestor01/azure-functions-sensor-network/blob/main/StatisticsFunctionProject/StatisticsFunction/function.json
+# IoT Sensor Framework - COMP3211 Distributed Systems
 
-### Setup Poetry Locally
-Run poetry / venv:
+A serverless IoT framework for environmental data collection and analysis using Azure Functions.
+
+## Prerequisites
+
+- **Azure CLI** installed and logged in
+- **Azure Functions Core Tools**
+- **Python 3.8+**
+- **Java 11+** (for database setup)
+- **Azure Subscription** with Function App and SQL Database
+
+## Quick Start
+
+### 1. Local Development Setup
+
 ```bash
-poetry shell
-source .venv/bin/activate
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+# OR
+.venv\Scripts\activate     # Windows
+
+# Install dependencies
+pip install azure-functions
+
+# Test locally
+func start
 ```
 
-Run api:
+### 2. Azure Database Setup (Java with JDBC)
 ```bash
-# python ./api.py
+cd java-db-setup
 
-# Start func
-func start -p 5000
-
-# Test by curl and pass in query
-curl -w "\n" "https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/http_trigger?code=TDHxylRCiXft87Ak2CIJ__WDydWfJ0VeZL206pUad7epAzFuaFjcMQ%3D%3D?name=Andreas"
-
-curl -s "\n" "https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/http_trigger?code=TDHxylRCiXft87Ak2CIJ__WDydWfJ0VeZL206pUad7epAzFuaFjcMQ%3D%3D?name=Andreas" | python3 -m json.tool
-
-# Test with POST JSON
-curl -X POST "https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/http_trigger?code=TDHxylRCiXft87Ak2CIJ__WDydWfJ0VeZL206pUad7epAzFuaFjcMQ%3D%3D?name=Andreas" \
-  -H "Content-Type: application/json" \
-  -d '{"name": "Andreas"}'
-
+# Compile and run database setup
+javac CreateDB.java QueryDB.java
+java CreateDB    # Creates table structure
+java QueryDB     # Verifies database connection
 ```
 
-### Setup on cloud - VM needs flask too!
-
+### 3. Deployment
 ```bash
-poetry install --no-root
-poetry self add poetry-plugin-shell
-poetry self update
-poetry shell
-```
+# Deploy to Azure
+./exec.sh deploy
 
-You need to setup the environment on the new VM.
-```bash
-# Terminal 1: SSH to VM
-ssh sc222ab@20.90.147.180
-# Choose 'yes' and type in password
-```
-
-Install dependencies:
-```bash
-sudo apt update
-
-python3 --version
-
-sudo apt install python3-pip -y; python3 -m pip install --upgrade pip
-
-pip3 --version
-
-pip3 -r reqs.txt
-```
-
-### Run
-
-#### Terminal 1: Use VM localhost
-```bash
-curl http://localhost:5000/todos
-```
-
-#### Terminal 2: From personal machine, execute commands to VM ip
-```bash
-curl http://20.90.147.180:5000/todos
-```
-
-#### Tunnelling
-Setup a tunnel from machine localhost to VM ip
-```bash
-# Terminal 1&2- Connect to the VM (Personal machine)
-ssh sc222ab@20.90.147.180
-python3 ./api.py # Run the python file (VM terminal)
-
-# Terminal 3 - Create the tunnel (Personal machine)
-ssh -L 5000:localhost:5000 sc222ab@20.90.147.180
-# Choose 'yes' and type in password
-
-# Terminal 4 - Commands run locally will execute remotely (Personal machine)
-curl http://localhost:5000/todos
-```
-
-
-#### Execute Commands (CRUD)
-
-```bash
-# GET the list of todos
-curl http://<HOST-IP>:5000/todos
-
-# GET a single task from the list
-curl http://<HOST-IP>:5000/todos/todo3
-
-# DELETE a task
-curl http://<HOST-IP>:5000/todos/todo2 -X DELETE -v
-
-# CREATE a task
-curl http://<HOST-IP>:5000/todos -d "task=new task!" -X POST -v
-
-# UPDATE a task
-curl http://<HOST-IP>:5000/todos/todo3 -d "task=something different" -X PUT -v
-```
-
-## CWK2
-
-### Task 1
-- Create a `simulate_data_function` function
-- This function should store the sensor data in an Azure Database made with JDBC in java, not python (it doesn't matter because this simply creates the db on azure which is sql and can be extracted by a python script.
-- - SensorData model: `sensor_id`, `temperature`, `wind_speed`, `relative_humidity`, `co2_level`
-
-### Task 2
-- Create a `statistics_function` function
-- This function reads the previous task's database and generates statistics
-- Calculate: `minimum`, `maximum` and `average`, do not store these calculations in the database
-
-### Task 3
-- (a) Make the `simulate_data_function` function run every `T` seconds
-- (b) Once in the database, a Database Change Tracking Trigger (new) should run
-- (c) This trigger should run the Statistics function.
-
-## Submit
-Only submit java files from jdbc (don't give config.properties)
-
-#### Get AZ info
-```bash
-# List all function apps in your subscription
-az functionapp list --output table
-
-# List all storage accounts
-az storage account list --output table
-```
-
-**Results**
-- *function app name*:  func-app-sc222ab
-- *subscription type*:  UoL-Teaching-SOC-MCC
-- *resource group*:     uol_feps_soc_comp_3211_sc222ab
-- *storage account*:    uolfepssoccomp3211sb64c
-
-#### Deploy
-```bash
-# Deploy (every time the function app is modified)
-func azure functionapp publish func-app-sc222ab --python#### Get AZ info
-```bash
-# List all function apps in your subscription
-az functionapp list --output table
-
-# List all storage accounts
-az storage account list --output table
-```
-
-**Results**
-- *function app name*:  func-app-sc222ab
-- *subscription type*:  UoL-Teaching-SOC-MCC
-- *resource group*:     uol_feps_soc_comp_3211_sc222ab
-- *storage account*:    uolfepssoccomp3211sb64c
-
-#### Deploy
-```bash
-# Deploy (every time the function app is modified)
+# Or manually:
 func azure functionapp publish func-app-sc222ab --python
-
-# Test
-curl "https://func-app-sc222ab.azurewebsites.net/api/simulate-data/5"
-
-Functions in func-app-sc222ab:
-  SimulateDataFunction - [httpTrigger]
-    Invoke url: https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/simulate-data/{sensor_count?}
-
-  StatisticsFunction - [httpTrigger]
-    Invoke url: https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/statistics/{data_limit?}
-
 ```
 
-# Test
-curl "https://func-app-sc222ab.azurewebsites.net/api/simulate-data/5"
+### 4. Testing the System
+```bash
+# Make executable
+chmod +x exec.sh
 
-Functions in func-app-sc222ab:
-  SimulateDataFunction - [httpTrigger]
-    Invoke url: https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/simulate-data/{sensor_count?}
+# Test individual tasks
+./exec.sh task1    # Data simulation
+./exec.sh task2    # Statistics
+./exec.sh task3    # Automated pipeline
+./exec.sh all      # Run all tests
+./exec.sh status   # Check system health
+```
 
-  StatisticsFunction - [httpTrigger]
-    Invoke url: https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/statistics/{data_limit?}
+**API Endpoints**
+- `GET /api/simulate-data?sensor_count=20` - Generate sensor data
+- `GET /api/statistics?data_limit=100` - Get analytics
 
+**Architecture**
+Task 1: HTTP-triggered data simulation → Azure SQL Database
+Task 2: HTTP-triggered statistics calculation ← Azure SQL Database
+Task 3:
+- Timer-triggered automatic data collection (every 10 minutes)
+- SQL-triggered automatic statistics on data insertion
+
+### Project Structure
+```text
+root/
+├── azfunc/
+│   ├── function_app.py          # Main Azure Functions
+│   ├── sensor_data_function.py  # Data generation module
+│   ├── statistics_function.py   # Analytics module
+│   ├── exec.sh                  # Test script
+│   └── *.json                   # Configuration
+├── java-db-setup/
+│   ├── CreateDB.java           # Database initialization
+│   ├── QueryDB.java            # Database queries
+│   └── sqljdbc/                # SQL Server JDBC driver
+└── README.md
 ```

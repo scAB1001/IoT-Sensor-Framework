@@ -39,7 +39,7 @@ public class CreateDB {
 
 
     // Drop existing table, if present
-    // TODO: Uncomment when submitting
+    // TODO: Uncomment for submission
     // try {
     //   statement.executeUpdate("DROP TABLE sensor_data");
     //   System.out.println("⚠️ Dropped existing sensor_data table");

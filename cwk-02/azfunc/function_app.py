@@ -5,12 +5,9 @@ from sensor_data_function import generate_sensor_readings
 from statistics_function import analyze_sensor_data
 
 
-
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 # Task 1: Simulate Data Function
-
-
 @app.function_name(name="SimulateDataFunction")
 @app.route(route="simulate-data", methods=["GET"])
 @app.sql_output(arg_name="sensorRecords",
@@ -56,8 +53,6 @@ def simulate_data_function(req, sensorRecords):
         return func.HttpResponse(error_response, mimetype="application/json", status_code=500)
 
 # Task 2: Statistics Function
-
-
 @app.function_name(name="StatisticsFunction")
 @app.route(route="statistics", methods=["GET"])
 @app.sql_input(arg_name="sensorData",
@@ -104,54 +99,54 @@ def statistics_function(req, sensorData):
 # ========== TASK 3(a): Scheduled Data Collection ==========
 # THIS RUNS EVERY 10 MINUTES, COMMENTED AND REDEPLOYED.
 
-# @app.function_name(name="ScheduledDataCollection")
-# @app.schedule(schedule="0 */10 * * * *", arg_name="timer", run_on_startup=False)
-# @app.sql_output(arg_name="sensorRecords",
-#                 command_text="dbo.sensor_data",
-#                 connection_string_setting="SqlConnectionString")
-# def scheduled_data_collection(timer, sensorRecords):
-#     """
-#     Timer-triggered function that automatically collects data from all 20 sensors every 10 minutes
-#     This satisfies Task 3(a): data collection at regular interval T
-#     """
-#     try:
-#         logging.info("🕒 Scheduled data collection triggered at %s",
-#                      datetime.now(timezone.utc).isoformat())
+@app.function_name(name="ScheduledDataCollection")
+@app.schedule(schedule="0 */10 * * * *", arg_name="timer", run_on_startup=False)
+@app.sql_output(arg_name="sensorRecords",
+                command_text="dbo.sensor_data",
+                connection_string_setting="SqlConnectionString")
+def scheduled_data_collection(timer, sensorRecords):
+    """
+    Timer-triggered function that automatically collects data from all 20 sensors every 10 minutes
+    This satisfies Task 3(a): data collection at regular interval T
+    """
+    try:
+        logging.info("🕒 Scheduled data collection triggered at %s",
+                     datetime.now(timezone.utc).isoformat())
 
-#         sensor_count = 20  # All 20 sensors as required
-#         sensor_data = generate_sensor_readings(sensor_count)
-#         timestamp = datetime.now(timezone.utc).isoformat()
+        sensor_count = 20  # All 20 sensors as required
+        sensor_data = generate_sensor_readings(sensor_count)
+        timestamp = datetime.now(timezone.utc).isoformat()
 
-#         # Convert to SQL rows
-#         rows = []
-#         for sensor in sensor_data:
-#             row = func.SqlRow.from_dict({
-#                 "sensor_id": sensor['sensor_id'],
-#                 "temperature": sensor['temperature'],
-#                 "wind_speed": sensor['wind_speed'],
-#                 "relative_humidity": sensor['relative_humidity'],
-#                 "co2_level": sensor['co2_level'],
-#                 "timestamp": timestamp
-#             })
-#             rows.append(row)
+        # Convert to SQL rows
+        rows = []
+        for sensor in sensor_data:
+            row = func.SqlRow.from_dict({
+                "sensor_id": sensor['sensor_id'],
+                "temperature": sensor['temperature'],
+                "wind_speed": sensor['wind_speed'],
+                "relative_humidity": sensor['relative_humidity'],
+                "co2_level": sensor['co2_level'],
+                "timestamp": timestamp
+            })
+            rows.append(row)
 
-#         # Store in database via binding
-#         sensorRecords.set(rows)
+        # Store in database via binding
+        sensorRecords.set(rows)
 
-#         logging.info(
-#             "✅ Scheduled collection: Stored data for %d sensors at %s", sensor_count, timestamp)
+        logging.info(
+            "✅ Scheduled collection: Stored data for %d sensors at %s", sensor_count, timestamp)
 
-#         # Log sample data for verification
-#         sample_sensor = sensor_data[0] if sensor_data else {}
-#         logging.info("📊 Sample sensor data: Sensor %d - Temp: %.1f°C, Wind: %.1f mph, Humidity: %d%%, CO2: %d ppm",
-#                      sample_sensor.get('sensor_id', 0),
-#                      sample_sensor.get('temperature', 0),
-#                      sample_sensor.get('wind_speed', 0),
-#                      sample_sensor.get('relative_humidity', 0),
-#                      sample_sensor.get('co2_level', 0))
+        # Log sample data for verification
+        sample_sensor = sensor_data[0] if sensor_data else {}
+        logging.info("📊 Sample sensor data: Sensor %d - Temp: %.1f°C, Wind: %.1f mph, Humidity: %d%%, CO2: %d ppm",
+                     sample_sensor.get('sensor_id', 0),
+                     sample_sensor.get('temperature', 0),
+                     sample_sensor.get('wind_speed', 0),
+                     sample_sensor.get('relative_humidity', 0),
+                     sample_sensor.get('co2_level', 0))
 
-#     except Exception as e:
-#         logging.error("❌ Scheduled data collection failed: %s", str(e))
+    except Exception as e:
+        logging.error("❌ Scheduled data collection failed: %s", str(e))
 
 # ========== TASK 3(b): SQL Trigger for Automatic Statistics ==========
 

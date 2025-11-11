@@ -1,9 +1,0 @@
-Subscription: UoL-Teaching-SOC-MCC
-Resource group: uol_feps_soc_comp_3211_sc222ab, e.g. uol_feps_soc_comp_3211_sc23xyz
-
-
-Public IP address:
-Private IP address:
-
-URL:
-https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/http_trigger?code=TDHxylRCiXft87Ak2CIJ__WDydWfJ0VeZL206pUad7epAzFuaFjcMQ%3D%3D

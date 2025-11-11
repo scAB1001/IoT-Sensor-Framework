@@ -71,6 +71,9 @@ __azurite_db*__.json
 *.lock
 *.toml
 
+git
+git.sh
+
 exec
 exec.sh
 

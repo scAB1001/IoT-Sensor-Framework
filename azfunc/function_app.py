@@ -3,11 +3,9 @@ import json
 from hello_function import handle_hello_request
 from sensor_data_function import handle_sensor_request
 from statistics_function import handle_analytics_request
-from db import create_tables
+from mock_db import mock_db
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
-create_tables()
-
 
 # Hello World Function
 @app.function_name(name="HttpExample")
@@ -23,6 +21,16 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
 @app.route(route="sensors/{sensor_count?}", methods=["GET"])
 def generate_sensor_data(req: func.HttpRequest) -> func.HttpResponse:
     response_text = handle_sensor_request(req)
+
+    # Store in mock database
+    try:
+        data = json.loads(response_text)
+        mock_db.store_sensor_data(
+            data.get("sensors", []),
+            data.get("timestamp")
+        )
+    except Exception as e:
+        print(f"Storage error: {e}")
 
     # Check if it's an error response
     if "error" in response_text:
@@ -56,6 +64,17 @@ def sensor_analytics(req: func.HttpRequest) -> func.HttpResponse:
 
         # Process analytics on the sensor data
         analytics_response = handle_analytics_request(sensor_response)
+
+        # Store analytics in mock database
+        try:
+            data = json.loads(analytics_response)
+            mock_db.store_analytics(
+                data.get("analytics", {}),
+                data.get("timestamp"),
+                data.get("sensor_count", 0)
+            )
+        except Exception as e:
+            print(f"Analytics storage error: {e}")
 
         return func.HttpResponse(
             analytics_response,

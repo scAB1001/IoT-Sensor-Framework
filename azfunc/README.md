@@ -112,3 +112,20 @@ curl http://<HOST-IP>:5000/todos/todo3 -d "task=something different" -X PUT -v
 ### Files
 https://learn.microsoft.com/en-us/azure/azure-functions/functions-develop-local?pivots=programming-language-python
 #### local.settings.json
+
+## CWK2
+
+### Task 1
+- Create a `simulate_data_function` function
+- This function should store the data in the Azure Database made in week 3
+- - SensorData model: `sensor_id`, `temperature`, `wind_speed`, `relative_humidity`, `co2_level`
+
+### Task 2
+- Create a `statistics_function` function
+- This function reads the previous task's database and generates statistics
+- Calculate: `minimum`, `maximum` and `average`
+
+### Task 3
+- a) Make the `simulate_data_function` function run every `T` seconds
+- b) Once in the database, a Database Change Tracking Trigger (new) should run
+- c) This trigger should run the Statistics function.

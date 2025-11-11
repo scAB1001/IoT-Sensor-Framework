@@ -4,7 +4,6 @@ import random
 import logging
 from datetime import datetime, timezone
 from typing import List, Dict, Union
-from SensorData import SensorData
 
 
 def calculate_basic_stats(values: List[float]) -> Dict[str, float]:

@@ -37,21 +37,33 @@ public class QueryDB {
                 "SELECT * FROM sensor_data ORDER BY timestamp DESC");
 
         System.out.println("\n=== ALL SENSOR DATA IN DATABASE ===");
+        System.out.println(
+                "----------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-4s | %-10s | %-17s | %-18s | %-14s | %-16s | %-24s |%n",
+                "ID", "Sensor ID", "Temperature (°C)", "Wind Speed (mph)", "Humidity (%)", "CO2 Level (ppm)", "Timestamp");
+        System.out.println(
+                "----------------------------------------------------------------------------------------------------------------------------");
+
         int count = 0;
         while (results.next()) {
             int id = results.getInt("id");
             int sensorId = results.getInt("sensor_id");
-            double temperatures = results.getDouble("temperature");
-            double windSpeeds = results.getDouble("wind_speed");
-            int relativeHumidities = results.getInt("relative_humidity");
-            int co2_levels = results.getInt("co2_level");
+            double temperature = results.getDouble("temperature");
+            double windSpeed = results.getDouble("wind_speed");
+            int relativeHumidity = results.getInt("relative_humidity");
+            int co2Level = results.getInt("co2_level");
             String timestamp = results.getString("timestamp");
 
-            System.out.printf(
-                    "ID: %d | Sensor: %d | Temp: %.1f°C | Wind: %.1f mph | Humidity: %d%% | CO2: %d ppm | Time: %s%n",
-                    id, sensorId, temperatures, windSpeeds, relativeHumidities, co2_levels, timestamp);
+            // Timestamp to 2 decimal places
+            String shortTimestamp = timestamp.substring(0, 24);
+
+            System.out.printf("| %-4d | %-10d | %17.2f | %18.2f | %14d | %16d | %-24s |%n",
+                    id, sensorId, temperature, windSpeed,
+                    relativeHumidity, co2Level, shortTimestamp);
+
             count++;
         }
+        System.out.printf("----------------------------------------------------------------------------------------------------------------------------%n");
         System.out.println("Total records in database: " + count);
         statement.close();
     }

@@ -37,17 +37,18 @@ public class CreateDB {
     // Create a Statement object to execute SQL commands
     Statement statement = database.createStatement();
 
-
     // Drop existing table, if present
     // TODO: Uncomment for submission
-    // try {
-    //   statement.executeUpdate("DROP TABLE sensor_data");
-    //   System.out.println("⚠️ Dropped existing sensor_data table");
-    // } catch (SQLException error) {
-    //   // Catch and ignore SQLException, as this merely indicates
-    //   // that the table didn't exist in the first place!
-    //   System.out.println("⚠️ sensor_data table did not exist, skipping drop");
-    // }
+    /*
+    try {
+      statement.executeUpdate("DROP TABLE sensor_data");
+      System.out.println("⚠️ Dropped existing sensor_data table");
+    } catch (SQLException error) {
+      // Catch and ignore SQLException, as this merely indicates
+      // that the table didn't exist in the first place!
+      System.out.println("⚠️ sensor_data table did not exist, skipping drop");
+    }
+    //*/
 
     // Create sensor_data table matching Azure Functions schema
     String createTableSQL = "IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='sensor_data' AND xtype='U') " +

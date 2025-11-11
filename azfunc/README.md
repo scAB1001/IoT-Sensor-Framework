@@ -106,8 +106,6 @@ curl http://<HOST-IP>:5000/todos -d "task=new task!" -X POST -v
 curl http://<HOST-IP>:5000/todos/todo3 -d "task=something different" -X PUT -v
 ```
 
-Files: https://learn.microsoft.com/en-us/azure/azure-functions/functions-develop-local?pivots=programming-language-python
-
 ## CWK2
 
 ### Task 1
@@ -121,6 +119,41 @@ Files: https://learn.microsoft.com/en-us/azure/azure-functions/functions-develop
 - Calculate: `minimum`, `maximum` and `average`, do not store these calculations in the database
 
 ### Task 3
-- a) Make the `simulate_data_function` function run every `T` seconds
-- b) Once in the database, a Database Change Tracking Trigger (new) should run
-- c) This trigger should run the Statistics function.
+- (a) Make the `simulate_data_function` function run every `T` seconds
+- (b) Once in the database, a Database Change Tracking Trigger (new) should run
+- (c) This trigger should run the Statistics function.
+
+## Submit
+Only submit java files from jdbc (don't give config.properties)
+
+#### Get AZ info
+```bash
+# List all function apps in your subscription
+az functionapp list --output table
+
+# List all storage accounts
+az storage account list --output table
+```
+
+**Results**
+- *function app name*:  func-app-sc222ab
+- *subscription type*:  UoL-Teaching-SOC-MCC
+- *resource group*:     uol_feps_soc_comp_3211_sc222ab
+- *storage account*:    uolfepssoccomp3211sb64c
+
+#### Deploy
+```bash
+# Deploy (every time the function app is modified)
+func azure functionapp publish func-app-sc222ab --python
+
+# Test
+curl "https://func-app-sc222ab.azurewebsites.net/api/simulate-data/5"
+
+Functions in func-app-sc222ab:
+  SimulateDataFunction - [httpTrigger]
+    Invoke url: https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/simulate-data/{sensor_count?}
+
+  StatisticsFunction - [httpTrigger]
+    Invoke url: https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/statistics/{data_limit?}
+
+```

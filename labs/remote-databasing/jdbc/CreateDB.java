@@ -25,9 +25,9 @@ public class CreateDB {
    *
    * The details of which driver to use, which database to
    * access and the username and password to use are being
-   * hard-coded. 
+   * hard-coded.
    * Refer to the connection string, JDBC SQL authentication
-   * on Azure 
+   * on Azure
    *
    * @return Connection object representing the connection
    * @throws IOException if properties file cannot be accessed
@@ -48,10 +48,10 @@ public class CreateDB {
 
     // JDBC connection string for Azure SQL Database
     String connectionUrl = String.format(
-        "jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;" + 
+        "jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;" +
         "trustServerCertificate=false;hostNameInCertificate=*%s;loginTimeout=30;",
         serverName, databaseName, username, password, certificate);
-    
+
     // Load JDBC driver
     try {
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -119,7 +119,7 @@ public class CreateDB {
      database.prepareStatement("INSERT INTO students VALUES(?,?,?)");
 
     // Loop over input data, inserting it into table...
- 
+
     while (true) {
 
       // Obtain user ID, surname and forename from input file
@@ -158,7 +158,7 @@ public class CreateDB {
     }
 
     Connection database = null;
- 
+
     try {
       BufferedReader input = new BufferedReader(new FileReader(argv[0]));
       database = getConnection();

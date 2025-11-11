@@ -32,8 +32,6 @@ curl -X POST "https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites
 
 ### Setup on cloud - VM needs flask too!
 
-#### Poetry
-
 ```bash
 poetry install --no-root
 poetry self add poetry-plugin-shell
@@ -41,7 +39,6 @@ poetry self update
 poetry shell
 ```
 
-#### SSH
 You need to setup the environment on the new VM.
 ```bash
 # Terminal 1: SSH to VM
@@ -109,21 +106,19 @@ curl http://<HOST-IP>:5000/todos -d "task=new task!" -X POST -v
 curl http://<HOST-IP>:5000/todos/todo3 -d "task=something different" -X PUT -v
 ```
 
-### Files
-https://learn.microsoft.com/en-us/azure/azure-functions/functions-develop-local?pivots=programming-language-python
-#### local.settings.json
+Files: https://learn.microsoft.com/en-us/azure/azure-functions/functions-develop-local?pivots=programming-language-python
 
 ## CWK2
 
 ### Task 1
 - Create a `simulate_data_function` function
-- This function should store the data in the Azure Database made in week 3
+- This function should store the sensor data in an Azure Database made with JDBC in java, not python (it doesn't matter because this simply creates the db on azure which is sql and can be extracted by a python script.
 - - SensorData model: `sensor_id`, `temperature`, `wind_speed`, `relative_humidity`, `co2_level`
 
 ### Task 2
 - Create a `statistics_function` function
 - This function reads the previous task's database and generates statistics
-- Calculate: `minimum`, `maximum` and `average`
+- Calculate: `minimum`, `maximum` and `average`, do not store these calculations in the database
 
 ### Task 3
 - a) Make the `simulate_data_function` function run every `T` seconds

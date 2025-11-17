@@ -48,5 +48,3 @@ def analyze_data_per_sensor(sensor_data: list) -> dict:
         }
 
     return result
-
-# Add rows, get mean of all sensor_id: 1

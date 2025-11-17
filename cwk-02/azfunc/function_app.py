@@ -170,9 +170,11 @@ def sensor_data_change_trigger(changes, recentSensorData):
     And Task 3(c): outputs same statistics as Task 2
     """
     try:
-        change_count = len(changes.get_changes()) if changes else 0
-        logging.info("🚀 SQL Trigger activated! Detected %d changes in sensor_data table at %s",
-                     change_count, datetime.now(timezone.utc).isoformat())
+        change_count = 0
+        if changes and hasattr(changes, 'get_changes'):
+            change_count = len(changes.get_changes())
+
+        print(f"🚀 SQL Trigger activated! Detected {change_count} changes")
 
         # Convert SQL rows to Python list for analysis
         sensor_readings = []
@@ -200,34 +202,35 @@ def sensor_data_change_trigger(changes, recentSensorData):
                      len(sensor_readings),
                      len(set(s['sensor_id'] for s in sensor_readings)))
 
+        ### Want above only
         # Log detailed statistics
-        temp_stats = analytics.get('temperature', {})
-        wind_stats = analytics.get('wind_speed', {})
-        humidity_stats = analytics.get('relative_humidity', {})
-        co2_stats = analytics.get('co2_level', {})
+        # temp_stats = analytics.get('temperature', {})
+        # wind_stats = analytics.get('wind_speed', {})
+        # humidity_stats = analytics.get('relative_humidity', {})
+        # co2_stats = analytics.get('co2_level', {})
 
-        logging.info("   🌡️  Temperature: %.1f-%.1f°C (avg: %.1f°C)",
-                     temp_stats.get('minimum', 0),
-                     temp_stats.get('maximum', 0),
-                     temp_stats.get('average', 0))
+        # logging.info("   🌡️  Temperature: %.1f-%.1f°C (avg: %.1f°C)",
+        #              temp_stats.get('minimum', 0),
+        #              temp_stats.get('maximum', 0),
+        #              temp_stats.get('average', 0))
 
-        logging.info("   💨 Wind Speed: %.1f-%.1f mph (avg: %.1f mph)",
-                     wind_stats.get('minimum', 0),
-                     wind_stats.get('maximum', 0),
-                     wind_stats.get('average', 0))
+        # logging.info("   💨 Wind Speed: %.1f-%.1f mph (avg: %.1f mph)",
+        #              wind_stats.get('minimum', 0),
+        #              wind_stats.get('maximum', 0),
+        #              wind_stats.get('average', 0))
 
-        logging.info("   💧 Humidity: %d-%d%% (avg: %d%%)",
-                     humidity_stats.get('minimum', 0),
-                     humidity_stats.get('maximum', 0),
-                     humidity_stats.get('average', 0))
+        # logging.info("   💧 Humidity: %d-%d%% (avg: %d%%)",
+        #              humidity_stats.get('minimum', 0),
+        #              humidity_stats.get('maximum', 0),
+        #              humidity_stats.get('average', 0))
 
-        logging.info("   🏭 CO2 Levels: %d-%d ppm (avg: %d ppm)",
-                     co2_stats.get('minimum', 0),
-                     co2_stats.get('maximum', 0),
-                     co2_stats.get('average', 0))
+        # logging.info("   🏭 CO2 Levels: %d-%d ppm (avg: %d ppm)",
+        #              co2_stats.get('minimum', 0),
+        #              co2_stats.get('maximum', 0),
+        #              co2_stats.get('average', 0))
 
-        # Check for environmental alerts
-        check_environmental_alerts(analytics)
+        # # Check for environmental alerts
+        # check_environmental_alerts(analytics)
 
     except Exception as e:
         logging.error("❌ SQL Trigger execution failed: %s", str(e))

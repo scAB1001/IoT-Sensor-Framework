@@ -11,7 +11,7 @@ BASE_URL = "https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.n
 RESULTS_FILE = "performance_results.json"
 
 
-def test_single_request(sensor_count):
+def test_single_request(sensor_count=20):
     """Test a single request and return timing data"""
     try:
         start_time = time.time()
@@ -66,7 +66,7 @@ def test_scalability_sequential():
     print("=" * 50)
 
     # Test different sensor counts - starting small and scaling up
-    sensor_counts = [1, 5, 10, 20, 50, 100, 200, 500]
+    sensor_counts = [1, 5, 10, 20, 50, 100, 200, 500, 1000]
     results = []
 
     for count in sensor_counts:
@@ -87,13 +87,12 @@ def test_scalability_sequential():
 
 
 def test_concurrent_load():
-    import shutil
     import concurrent.futures
     """Test concurrent requests to measure parallel scalability"""
     print("\n🔥 Starting Concurrent Load Test")
     print("=" * 50)
 
-    concurrent_requests = [1, 2, 5, 10]
+    concurrent_requests = [1, 2, 5, 10, 20, 50, 100]
     sensor_count = 20  # Fixed sensor count for concurrency test
     concurrency_results = []
 
@@ -142,9 +141,6 @@ def test_concurrent_load():
 def generate_scalability_graphs(sequential_results, concurrency_results):
     """Generate comprehensive scalability graphs"""
     print("\n📊 Generating Scalability Graphs...")
-
-    # Create results directory if it doesn't exist
-    os.makedirs('performance_results', exist_ok=True)
 
     # Graph 1: Response Time vs Sensor Count
     plt.figure(figsize=(12, 8))

@@ -65,6 +65,10 @@ chmod +x exec.sh
 - `GET /api/simulate-data?sensor_count` - Generate sensor data
 - `GET /api/statistics?` - Get analytics
 
+**BASE URL**
+`https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net`
+
+
 **Architecture**
 Task 1: HTTP-triggered data simulation → Azure SQL Database
 Task 2: HTTP-triggered statistics calculation ← Azure SQL Database

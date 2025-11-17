@@ -68,35 +68,51 @@ public class CreateDB {
     statement.close();
   }
 
-  public static void enableChangeTracking(Connection database) throws SQLException {
+  public static void enableDatabaseChangeTracking(Connection database) throws SQLException {
     Statement statement = database.createStatement();
 
     try {
-      // Enable change tracking at database level
+      // Enable change tracking at database level (REQUIRED)
       String enableDbTracking = "IF NOT EXISTS (SELECT * FROM sys.change_tracking_databases WHERE database_id = DB_ID()) "
           +
           "BEGIN " +
           "   ALTER DATABASE CURRENT SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 2 DAYS, AUTO_CLEANUP = ON); " +
           "   PRINT 'Database change tracking enabled'; " +
-          "END";
+          "END " +
+          "ELSE " +
+          "   PRINT 'Database change tracking already enabled'";
 
       statement.executeUpdate(enableDbTracking);
-      System.out.println("✅ Database change tracking enabled (or already active)");
+      System.out.println("✅ Database-level change tracking enabled");
 
-      // Enable change tracking for sensor_data table
+    } catch (SQLException e) {
+      System.err.println("❌ Failed to enable database change tracking: " + e.getMessage());
+      throw e;
+    } finally {
+      statement.close();
+    }
+  }
+
+  public static void enableTableChangeTracking(Connection database) throws SQLException {
+    Statement statement = database.createStatement();
+
+    try {
+      // Enable change tracking for sensor_data table (REQUIRED)
       String enableTableTracking = "IF NOT EXISTS (SELECT * FROM sys.change_tracking_tables ct " +
           "              JOIN sys.tables t ON ct.object_id = t.object_id " +
           "              WHERE t.name = 'sensor_data') " +
           "BEGIN " +
           "   ALTER TABLE sensor_data ENABLE CHANGE_TRACKING; " +
           "   PRINT 'Table change tracking enabled'; " +
-          "END";
+          "END " +
+          "ELSE " +
+          "   PRINT 'Table change tracking already enabled'";
 
       statement.executeUpdate(enableTableTracking);
-      System.out.println("✅ Table change tracking enabled for sensor_data");
+      System.out.println("✅ Table-level change tracking enabled for sensor_data");
 
     } catch (SQLException e) {
-      System.err.println("❌ Failed to enable change tracking: " + e.getMessage());
+      System.err.println("❌ Failed to enable table change tracking: " + e.getMessage());
       throw e;
     } finally {
       statement.close();
@@ -113,27 +129,40 @@ public class CreateDB {
         "        WHEN ct.object_id IS NOT NULL THEN 'ENABLED'\n" +
         "        ELSE 'DISABLED'\n" +
         "    END AS change_tracking_status,\n" +
-        "    ct.min_valid_version,\n" +
-        "    ct.is_track_columns_updated_on\n" +
+        "    dct.is_auto_cleanup_on,\n" +
+        "    dct.retention_period,\n" +
+        "    dct.retention_period_units_desc\n" +
         "FROM sys.tables t\n" +
         "LEFT JOIN sys.change_tracking_tables ct ON t.object_id = ct.object_id\n" +
+        "CROSS JOIN sys.change_tracking_databases dct\n" +
         "WHERE t.name = 'sensor_data'";
 
     ResultSet resultSet = statement.executeQuery(verifySQL);
 
+    System.out.println("\n🔍 CHANGE TRACKING VERIFICATION:");
+    System.out.println("=================================");
+
     if (resultSet.next()) {
+      String dbName = resultSet.getString("database_name");
       String tableName = resultSet.getString("table_name");
       String status = resultSet.getString("change_tracking_status");
+      boolean autoCleanup = resultSet.getBoolean("is_auto_cleanup_on");
+      int retention = resultSet.getInt("retention_period");
+      String retentionUnits = resultSet.getString("retention_period_units_desc");
 
-      System.out.println("🔍 Change Tracking Verification:");
-      System.out.println("   Table: " + tableName);
-      System.out.println("   Status: " + status);
+      System.out.println("Database: " + dbName);
+      System.out.println("Table: " + tableName);
+      System.out.println("Status: " + status);
+      System.out.println("Auto Cleanup: " + (autoCleanup ? "ON" : "OFF"));
+      System.out.println("Retention: " + retention + " " + retentionUnits);
 
       if ("ENABLED".equals(status)) {
-        System.out.println("   ✅ Ready for Azure SQL Triggers!");
+        System.out.println("✅ READY for Azure SQL Triggers!");
       } else {
-        System.out.println("   ❌ Change tracking not enabled");
+        System.out.println("❌ NOT READY - Change tracking not properly enabled");
       }
+    } else {
+      System.out.println("❌ Could not verify change tracking status");
     }
 
     resultSet.close();
@@ -164,8 +193,9 @@ public class CreateDB {
       createSensorTable(database);
       System.out.println("✅ Database setup complete - ready for Azure Functions");
 
-      // enableChangeTracking(database);
-      // verifyChangeTracking(database);
+      enableDatabaseChangeTracking(database);
+      enableTableChangeTracking(database);
+      verifyChangeTracking(database);
       // insertSampleData(database);
 
     } catch (Exception error) {

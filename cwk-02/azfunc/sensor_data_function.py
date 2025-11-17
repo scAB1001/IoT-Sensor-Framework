@@ -1,7 +1,7 @@
 import random
-from typing import List, Dict, Union
 
-def generate_sensor_readings(sensor_count: int) -> List[Dict[str, Union[float, int]]]:
+# Default the number of sensors to 20 for Task 1 if not specified
+def generate_sensor_readings(sensor_count=20) -> list[dict]:
     """
     Generate simulated sensor data for Leeds with realistic random variations.
     Matches the exact requirements from Task 1.

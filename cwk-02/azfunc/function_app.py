@@ -2,7 +2,7 @@ import azure.functions as func
 import json, logging
 from datetime import datetime, timezone
 from sensor_data_function import generate_sensor_readings
-from statistics_function import analyze_sensor_data
+from statistics_function import analyze_data_per_sensor
 
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
@@ -56,12 +56,12 @@ def simulate_data_function(req, sensorRecords):
 @app.function_name(name="StatisticsFunction")
 @app.route(route="statistics", methods=["GET"])
 @app.sql_input(arg_name="sensorData",
-               command_text="SELECT sensor_id, temperature, wind_speed, relative_humidity, co2_level, timestamp FROM dbo.sensor_data ORDER BY timestamp DESC",
-               command_type="Text",
+               command_text="SELECT sensor_id, temperature, wind_speed, relative_humidity, co2_level FROM dbo.sensor_data ORDER BY timestamp DESC",
                connection_string_setting="SqlConnectionString")
 def statistics_function(req, sensorData):
     try:
         sensor_list = []
+
         for row in sensorData:
             sensor_list.append({
                 'sensor_id': row['sensor_id'],
@@ -78,7 +78,8 @@ def statistics_function(req, sensorData):
                 status_code=200
             )
 
-        analytics = analyze_sensor_data(sensor_list)
+        # Get analytics with per-sensor statistics
+        analytics = analyze_data_per_sensor(sensor_list)
 
         response_data = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -96,9 +97,9 @@ def statistics_function(req, sensorData):
         error_response = json.dumps({"error": f"Statistics failed: {str(e)}"})
         return func.HttpResponse(error_response, mimetype="application/json", status_code=500)
 
+
 # ========== TASK 3(a): Scheduled Data Collection ==========
 # THIS RUNS EVERY 10 MINUTES, COMMENTED AND REDEPLOYED.
-
 @app.function_name(name="ScheduledDataCollection")
 @app.schedule(schedule="0 */10 * * * *", arg_name="timer", run_on_startup=False)
 @app.sql_output(arg_name="sensorRecords",
@@ -148,9 +149,8 @@ def scheduled_data_collection(timer, sensorRecords):
     except Exception as e:
         logging.error("❌ Scheduled data collection failed: %s", str(e))
 
+
 # ========== TASK 3(b): SQL Trigger for Automatic Statistics ==========
-
-
 @app.function_name(name="SensorDataChangeTrigger")
 @app.sql_trigger(arg_name="changes",
                  table_name="sensor_data",
@@ -192,7 +192,7 @@ def sensor_data_change_trigger(changes, recentSensorData):
 
         # Calculate statistics using the same function as Task 2
         # This satisfies Task 3(c): same results as Task 2
-        analytics = analyze_sensor_data(sensor_readings)
+        analytics = analyze_data_per_sensor(sensor_readings)
 
         # Log the statistics results
         logging.info("📈 AUTOMATIC STATISTICS CALCULATED:")

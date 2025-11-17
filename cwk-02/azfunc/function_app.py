@@ -101,7 +101,7 @@ def statistics_function(req, sensorData):
 # ========== TASK 3(a): Scheduled Data Collection ==========
 # THIS RUNS EVERY 10 MINUTES, COMMENTED AND REDEPLOYED.
 @app.function_name(name="ScheduledDataCollection")
-@app.schedule(schedule="0 */10 * * * *", arg_name="timer", run_on_startup=False)
+@app.schedule(schedule="0 */10 * * * *", arg_name="timer", run_on_startup=True)
 @app.sql_output(arg_name="sensorRecords",
                 command_text="dbo.sensor_data",
                 connection_string_setting="SqlConnectionString")

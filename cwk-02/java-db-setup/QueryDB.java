@@ -41,6 +41,53 @@ public class QueryDB {
         return connection;
     }
 
+    public static void calculateStatistics(Connection database, String filter) throws SQLException {
+        StringBuilder query = new StringBuilder("SELECT " +
+                "sensor_id, " +
+                "MIN(temperature) as min_temp, MAX(temperature) as max_temp, AVG(temperature) as avg_temp, " +
+                "MIN(wind_speed) as min_wind, MAX(wind_speed) as max_wind, AVG(wind_speed) as avg_wind, " +
+                "MIN(relative_humidity) as min_humidity, MAX(relative_humidity) as max_humidity, AVG(relative_humidity) as avg_humidity, "
+                +
+                "MIN(co2_level) as min_co2, MAX(co2_level) as max_co2, AVG(co2_level) as avg_co2 " +
+                "FROM sensor_data");
+
+        if (filter != null && !filter.isEmpty()) {
+            query.append(" WHERE ").append(filter);
+        }
+
+        query.append(" GROUP BY sensor_id ORDER BY sensor_id");
+
+        Statement statement = database.createStatement();
+        ResultSet results = statement.executeQuery(query.toString());
+
+        System.out.println("\n=== SENSOR STATISTICS ===");
+        System.out.println("Sensor ID | Temperature (°C) | Wind Speed (mph) | Humidity (%) | CO2 Level (ppm)");
+        System.out.println("----------|------------------|------------------|--------------|-----------------");
+
+        while (results.next()) {
+            int sensorId = results.getInt("sensor_id");
+            double minTemp = results.getDouble("min_temp");
+            double maxTemp = results.getDouble("max_temp");
+            double avgTemp = results.getDouble("avg_temp");
+            double minWind = results.getDouble("min_wind");
+            double maxWind = results.getDouble("max_wind");
+            double avgWind = results.getDouble("avg_wind");
+            int minHumidity = results.getInt("min_humidity");
+            int maxHumidity = results.getInt("max_humidity");
+            double avgHumidity = results.getDouble("avg_humidity");
+            int minCo2 = results.getInt("min_co2");
+            int maxCo2 = results.getInt("max_co2");
+            double avgCo2 = results.getDouble("avg_co2");
+
+            System.out.printf("%9d | %6.2f-%-9.2f | %6.2f-%-9.2f | %4d-%-7d | %5d-%-5d%n",
+                    sensorId, minTemp, maxTemp, minWind, maxWind, minHumidity, maxHumidity, minCo2, maxCo2);
+            System.out.printf("%9s | avg: %-11.2f | avg: %-11.2f | avg: %-7.2f | avg: %-8.2f%n",
+                    "", avgTemp, avgWind, avgHumidity, avgCo2);
+            System.out.println("----------|------------------|------------------|--------------|-----------------");
+        }
+
+        statement.close();
+    }
 
     /*
      * Generic method to query sensor_data table with optional ordering and filtering
@@ -128,6 +175,8 @@ public class QueryDB {
 
             querySensorData(database, "timestamp DESC", "sensor_id = " + sensorId,
                     "=== DATA FOR SENSOR " + sensorId + " ===");
+
+            calculateStatistics(database, "sensor_id = " + sensorId);
 
         } finally {
             scanner.close();

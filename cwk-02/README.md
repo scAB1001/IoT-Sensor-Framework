@@ -62,8 +62,8 @@ chmod +x exec.sh
 ```
 
 **API Endpoints**
-- `GET /api/simulate-data?sensor_count=20` - Generate sensor data
-- `GET /api/statistics?data_limit=100` - Get analytics
+- `GET /api/simulate-data?sensor_count` - Generate sensor data
+- `GET /api/statistics?` - Get analytics
 
 **Architecture**
 Task 1: HTTP-triggered data simulation → Azure SQL Database

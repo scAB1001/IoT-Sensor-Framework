@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import json
 import numpy as np
 from datetime import datetime, timezone
-import os
 
 # Configuration
 BASE_URL = "https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api"
@@ -92,7 +91,8 @@ def test_concurrent_load():
     print("\n🔥 Starting Concurrent Load Test")
     print("=" * 50)
 
-    concurrent_requests = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2500, 5000, 10000]
+    concurrent_requests = [1, 2, 5, 10, 20, 50,
+                           100, 200, 500, 1000, 2500, 5000, 10000]
     sensor_count = 20  # Fixed sensor count for concurrency test
     concurrency_results = []
 
@@ -132,7 +132,8 @@ def test_concurrent_load():
         }
 
         concurrency_results.append(result)
-        print(f"✅ {successful_requests}/{num_requests} successful, Avg: {avg_response_time:.1f} ms")
+        print(
+            f"✅ {successful_requests}/{num_requests} successful, Avg: {avg_response_time:.1f} ms")
 
     return concurrency_results
 

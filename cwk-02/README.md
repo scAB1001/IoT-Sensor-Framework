@@ -17,7 +17,6 @@ TODO: Insert YT video link
 ## Installation
 
 
-
 ### Prerequisites
 
 Admin privileges are required on your machine to run shell scripts and executables.
@@ -53,7 +52,7 @@ Java was used for the database creation and querying during development:
 
 ##### Requirements
 
-A file `requirements.txt` has been provided which includes all packages installed in order to run this project.
+A file `requirements.txt` has been provided which includes all packages and the *specific version* installed in order to run this project. If errors arise with specific versions, remove the constraint on each line so that each package simply looks like this: `azure-functions`
 
 *Note: The core coursework function tasks only require that **azure-functions** is installed. The rest pertains to performance testing and Java database creation*
 
@@ -69,9 +68,13 @@ To run and verify each of these tasks, the relevant endpoint is called and a JSO
 TODO: Include via shell script
 
 
-### Task 1
-Will call the first Data Simulation function.
+### Setup
+TODO: Scripts
 
+### Executing Tasks
+
+**Task 1**
+Will call the first Data Simulation function.
 ```bash
 # Call the function endpoint with optional sensor count specified via <?sensor_count=>
 curl "https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/simulate-data?sensor_count=20"
@@ -88,8 +91,7 @@ java QueryDB
 
 ```
 
-
-### Task 2
+**Task 2**
 
 ```bash
 # Call the function endpoint
@@ -106,12 +108,16 @@ java QueryDB
 
 ```
 
-
-### Task 3
+**Task 3**
 
 For this task, you must uncomment and redeploy the code to Azure, so that the new changes take effect. This was commented out to avoid the function running when I am not actively using it. \\
 
-This tasks simply activates the schedule and enables the database change trigger on startup. This means that every T seconds (MODIFIABLE)
+This tasks simply activates the schedule and enables the database change trigger on startup. This means that every T seconds (**TODO**: MODIFIABLE).
+
+
+## Project status
+
+Tis project had a short deadline and development was delayed due to other ongoing courseworks. I would have liked to implement cleaner, more modularised and user-friendly code. If time permits, I will return to this project, however, this will not contribute to the coursework grade.
 
 
 ## Reference Material

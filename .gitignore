@@ -74,10 +74,8 @@ __azurite_db*__.json
 git
 git.sh
 
-exec
-exec.sh
-
 build
-build.sh
+
+exec
 
 performance_results/

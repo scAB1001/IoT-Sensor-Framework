@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# IoT Framework Script - COMP3211 Distributed Systems
+# IoT Framework Script - COMP3211 CWK2
 
 # Colors for output
 RED='\033[0;31m'

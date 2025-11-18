@@ -1,93 +1,119 @@
-https://github.com/MichealNestor01/azure-functions-sensor-network/blob/main/StatisticsFunctionProject/StatisticsFunction/function.json
-# IoT Sensor Framework - COMP3211 Distributed Systems
 
-A serverless IoT framework for environmental data collection and analysis using Azure Functions.
+# Internet of Things (IoT) simulation Framework (COMP3811 Coursework 2 - 2025)
 
-## Prerequisites
 
-- **Azure CLI** installed and logged in
-- **Azure Functions Core Tools**
-- **Python 3.8+**
-- **Java 11+** (for database setup)
-- **Azure Subscription** with Function App and SQL Database
 
-## Quick Start
+## Description
 
-### 1. Local Development Setup
+The following README provides a guide to my COMP3811 Coursework 2 solution.
+To run...
+
+
+## Demonstration (Video)
+
+TODO: Insert YT video link
+
+
+## Installation
+
+
+
+### Prerequisites
+
+Admin privileges are required on your machine to run shell scripts and executables.
+
+
+#### Azure Environment
+
+A valid Student Microsoft Azure account is needed to create both resources: The *Function App* and *Azure SQL Database (Azure SQL)*:
+- **Subscription**: *UoL-Teaching-SOC-MCC*
+- **Resource group**: *uol_feps_soc_comp_3211_sc222ab*
+- **OPTIONAL**: The Azure Tools Extension Pack and Azure Functions Extension were installed for my IDE - Visual Studio Code.
+
+
+#### Python Environment
+
+Python was used for the Azure Function code as well as performance testing:
+- *Python* version 3.12.12
+- *Pip* package installer for Python
+- **OPTIONAL**: These package were installed inside a configured *virtual environment* for the project but this is not explicitly necessary for setup.
+
+
+#### Java Environment
+
+Java was used for the database creation and querying during development:
+- *openjdk 25* 2025-09-16
+- OpenJDK Runtime Environment (build 25+36-Ubuntu-124.04.2)
+- OpenJDK 64-Bit Server VM (build 25+36-Ubuntu-124.04.2, mixed mode, sharing)
+- *javac 25*
+- Microsoft JDBC Driver for SQL Server version 12.8, providing mssql-jdbc-12.8.0.jre8.jar and mssql-jdbc-12.8.0.jre11.jar class library files. (JAR files were included in my machine's *classpath*)
+
+*Note: The CreateDB.java template file, QueryDB.java template file and JDBC Driver with the corresponding JAR files were provided as part of the in-course lab materials in a file *sqljdbc_12.8.1.0_enu.zip*
+
+
+##### Requirements
+
+A file `requirements.txt` has been provided which includes all packages installed in order to run this project.
+
+*Note: The core coursework function tasks only require that **azure-functions** is installed. The rest pertains to performance testing and Java database creation*
+
+TODO: Shell script setup?
+
+
+## Usage
+
+Ensure both the Azure Database and Function App are running. \\
+The Database will appear offline until you create or query the database for the first time.
+
+To run and verify each of these tasks, the relevant endpoint is called and a JSON output can be extracted. Furthermore, the `QueryDB.java` file is ran to further verify and provide a more detailed insight.
+TODO: Include via shell script
+
+
+### Task 1
+Will call the first Data Simulation function.
 
 ```bash
-# Create virtual environment
-python -m venv .venv
-source .venv/bin/activate  # Linux/Mac
-# OR
-.venv\Scripts\activate     # Windows
+# Call the function endpoint with optional sensor count specified via <?sensor_count=>
+curl "https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/simulate-data?sensor_count=20"
 
-# Install dependencies
-pip install azure-functions
+# Example output
+TODO: Example JSON output
 
-# Test locally
-func start
+
+TODO: Shell script to do this!
+# See verbose insights
+java QueryDB
+
+# Example output
+
 ```
 
-### 2. Azure Database Setup (Java with JDBC)
+
+### Task 2
+
 ```bash
-cd java-db-setup
+# Call the function endpoint
+curl "https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/statistics"
 
-# Compile and run database setup
-javac CreateDB.java QueryDB.java
-java CreateDB    # Creates table structure
-java QueryDB     # Verifies database connection
+# Example output
+TODO: Example JSON output
+
+
+# See verbose insights
+java QueryDB
+
+# Example output
+
 ```
 
-### 3. Deployment
-```bash
-# Deploy to Azure
-./exec.sh deploy
 
-# Or manually:
-func azure functionapp publish func-app-sc222ab --python
-```
+### Task 3
 
-### 4. Testing the System
-```bash
-# Make executable
-chmod +x exec.sh
+For this task, you must uncomment and redeploy the code to Azure, so that the new changes take effect. This was commented out to avoid the function running when I am not actively using it. \\
 
-# Test individual tasks
-./exec.sh task1    # Data simulation
-./exec.sh task2    # Statistics
-./exec.sh task3    # Automated pipeline
-./exec.sh all      # Run all tests
-./exec.sh status   # Check system health
-```
-
-**API Endpoints**
-- `GET /api/simulate-data?sensor_count` - Generate sensor data
-- `GET /api/statistics?` - Get analytics
-
-**BASE URL**
-`https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net`
+This tasks simply activates the schedule and enables the database change trigger on startup. This means that every T seconds (MODIFIABLE)
 
 
-**Architecture**
-Task 1: HTTP-triggered data simulation → Azure SQL Database
-Task 2: HTTP-triggered statistics calculation ← Azure SQL Database
-Task 3:
-- Timer-triggered automatic data collection (every 10 minutes)
-- SQL-triggered automatic statistics on data insertion
+## Reference Material
 
-### Project Structure
-```text
-root/
-├── azfunc/
-│   ├── function_app.py          # Main Azure Functions
-│   ├── sensor_data_function.py  # Data generation module
-│   ├── statistics_function.py   # Analytics module
-│   ├── exec.sh                  # Test script
-│   └── *.json                   # Configuration
-├── java-db-setup/
-│   ├── CreateDB.java           # Database initialization
-│   ├── QueryDB.java            # Database queries
-│   └── sqljdbc/                # SQL Server JDBC driver
-└── README.md
-```
+- TODO: Include all MS Azure sites used and code found online.

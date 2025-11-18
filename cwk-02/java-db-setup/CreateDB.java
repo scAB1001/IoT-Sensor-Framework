@@ -190,7 +190,7 @@ public class CreateDB {
       database = getConnection();
       System.out.println("✅ Connected to Azure SQL Database");
 
-      createSensorTable(database);
+      // createSensorTable(database);
       System.out.println("✅ Database setup complete - ready for Azure Functions");
 
       enableDatabaseChangeTracking(database);

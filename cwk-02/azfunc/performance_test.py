@@ -66,7 +66,7 @@ def test_scalability_sequential():
     print("=" * 50)
 
     # Test different sensor counts - starting small and scaling up
-    sensor_counts = [1, 5, 10, 20, 50, 100, 200, 500, 1000]
+    sensor_counts = [1, 5, 10, 20, 50, 100, 200, 500, 1000, 2500, 5000]
     results = []
 
     for count in sensor_counts:
@@ -92,7 +92,7 @@ def test_concurrent_load():
     print("\n🔥 Starting Concurrent Load Test")
     print("=" * 50)
 
-    concurrent_requests = [1, 2, 5, 10, 20, 50, 100]
+    concurrent_requests = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2500, 5000, 10000]
     sensor_count = 20  # Fixed sensor count for concurrency test
     concurrency_results = []
 
@@ -132,8 +132,7 @@ def test_concurrent_load():
         }
 
         concurrency_results.append(result)
-        print(
-            f"✅ {successful_requests}/{num_requests} successful, Avg: {avg_response_time:.1f} ms")
+        print(f"✅ {successful_requests}/{num_requests} successful, Avg: {avg_response_time:.1f} ms")
 
     return concurrency_results
 

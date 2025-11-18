@@ -27,6 +27,7 @@ If errors arise with specific versions, remove the constraint on each line so th
 
 *Note: The core coursework function tasks only require that **azure-functions** is installed. The rest pertains to performance testing and Java database creation*
 
+
 #### Azure Environment
 
 A valid Student Microsoft Azure account is needed to create both resources: The *Function App* and *Azure SQL Database (Azure SQL)*:
@@ -55,11 +56,6 @@ Java was used for the database creation and querying during development:
 *Note: The CreateDB.java template file, QueryDB.java template file and JDBC Driver with the corresponding JAR files were provided as part of the in-course lab materials in a file *sqljdbc_12.8.1.0_enu.zip*
 
 
-
-
-TODO: Shell script setup?
-
-
 ## Usage
 
 Ensure prerequisites are satisfied to begin with the setup. \\
@@ -82,7 +78,6 @@ root/
 │   └── *.json                   # Configuration files
 ├── java-db/
 ```
-
 
 Enable and Execute this script
 
@@ -115,6 +110,7 @@ A successful example output can be seen below:
 ✅  python3 found:
     Python 3.12.12
 
+
 # Output for virtual environment initialisation
 ========================================
   Setting up Python Virtual Environment
@@ -124,6 +120,7 @@ A successful example output can be seen below:
 ℹ️  Activating virtual environment...
 ✅  Virtual environment activated.
 ℹ️  Use command 'deactivate' to exit the virtual environment.
+
 
 # Output for the requirements installation
 ========================================
@@ -145,7 +142,7 @@ Package            Version
 azure-functions    1.24.0
 # other packages...
 
-# You should also see a ((.venv)) preceding your active terminal input line
+# You should now see a ((.venv)) preceding your active terminal input line
 ```
 
 
@@ -165,7 +162,6 @@ root/
 │   └── sqljdbc_12.8/            # JDBC Driver for SQL Server
 ├── azfunc/
 ```
-
 
 Enable and Execute this script
 

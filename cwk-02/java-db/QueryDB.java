@@ -149,38 +149,31 @@ public class QueryDB {
         querySensorData(database, "sensor_id, timestamp DESC", null, "=== DATA GROUPED BY SENSOR ===");
     }
 
-    public static void querySensorById(Connection database) throws SQLException {
+    public static void querySensorById(Connection database, Scanner scanner) throws SQLException {
 
-        Scanner scanner = new Scanner(System.in);
         int sensorId = 0;
         boolean validInput = false;
 
-        try {
-            while (!validInput) {
-                System.out.print("Which sensor ID would you like to query? (1-20): ");
+        while (!validInput) {
+            System.out.print("Which sensor ID would you like to query? (1-20): ");
+            String input = scanner.nextLine().trim();
 
-                if (scanner.hasNextInt()) {
-                    sensorId = scanner.nextInt();
-
-                    if (sensorId >= 1 && sensorId <= 20) {
-                        validInput = true;
-                    } else {
-                        System.out.println("❌ Invalid sensor ID: " + sensorId + ". Please enter a number between 1-20.");
-                    }
+            try {
+                sensorId = Integer.parseInt(input);
+                if (sensorId >= 1 && sensorId <= 20) {
+                    validInput = true;
                 } else {
-                    System.out.println("❌ Invalid input. Please enter a number between 1-20.");
-                    scanner.next(); // Clear the invalid input
+                    System.out.println("❌ Invalid sensor ID: " + sensorId + ". Please enter a number between 1-20.");
                 }
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Invalid input. Please enter a number between 1-20.");
             }
-
-            querySensorData(database, "timestamp DESC", "sensor_id = " + sensorId,
-                    "=== DATA FOR SENSOR " + sensorId + " ===");
-
-            calculateStatistics(database, "sensor_id = " + sensorId);
-
-        } finally {
-            scanner.close();
         }
+
+        querySensorData(database, "timestamp DESC", "sensor_id = " + sensorId,
+                "=== DATA FOR SENSOR " + sensorId + " ===");
+
+        calculateStatistics(database, "sensor_id = " + sensorId);
 
     }
 
@@ -221,23 +214,43 @@ public class QueryDB {
         statement.close();
     }
 
+    public static void menu(Connection database) throws SQLException {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("\n=== QUERY MENU ===");
+            System.out.println("1. View data grouped by sensor");
+            System.out.println("2. View data for a specific sensor");
+            System.out.println("3. Exit");
+            System.out.print("Select an option (1-3): ");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    queryBySensor(database);
+                    break;
+                case "2":
+                    querySensorById(database, scanner);
+                    break;
+                case "3":
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+
     public static void main(String[] argv) {
         Connection database = null;
         try {
             database = getConnection();
             System.out.println("✅ Connected to Azure SQL Database");
 
-            // Show database stats
             getDatabaseStats(database);
 
-            // Query all data
-            queryAllData(database);
-
-            // Query data grouped by sensor
-            queryBySensor(database);
-
-            // Query data for a specific sensor (e.g., sensor_id = 3)
-            querySensorById(database);
+            menu(database);
 
         } catch (Exception error) {
             System.err.println("❌ Database query failed:");

@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from sensor_data_function import generate_sensor_readings
 from statistics_function import analyze_data_per_sensor
 
-
+# Initialize the Function App with anonymous HTTP access
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 # Task 1: Simulate Data Function
@@ -15,6 +15,7 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
                 connection_string_setting="SqlConnectionString")
 def simulate_data_function(req, sensorRecords):
     try:
+        # Get sensor count from query parameter, default to 20
         sensor_count = int(req.params.get('sensor_count', 20))
         sensor_data = generate_sensor_readings(sensor_count)
         timestamp = datetime.now(timezone.utc).isoformat()
@@ -38,7 +39,8 @@ def simulate_data_function(req, sensorRecords):
         response_data = {
             "timestamp": timestamp,
             "sensor_count": sensor_count,
-            "sensors": sensor_data,
+            "sensors": sensor_data[:3], # Sample first 3 sensors for brevity
+            # "sensors": sensor_data,  # Full data
             "database_status": f"Stored {len(sensor_data)} records"
         }
 
@@ -56,7 +58,7 @@ def simulate_data_function(req, sensorRecords):
 @app.function_name(name="StatisticsFunction")
 @app.route(route="statistics", methods=["GET"])
 @app.sql_input(arg_name="sensorData",
-               command_text="SELECT sensor_id, temperature, wind_speed, relative_humidity, co2_level FROM dbo.sensor_data ORDER BY timestamp DESC",
+               command_text="SELECT sensor_id, temperature, wind_speed, relative_humidity, co2_level FROM dbo.sensor_data ORDER BY sensor_id",
                connection_string_setting="SqlConnectionString")
 def statistics_function(req, sensorData):
     try:
@@ -84,7 +86,8 @@ def statistics_function(req, sensorData):
         response_data = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "data_analyzed": len(sensor_list),
-            "analytics": analytics
+            "analytics": list(analytics.items())[:3] # Sample first 3 sensors for brevity
+            # "analytics": analytics # Full data
         }
 
         return func.HttpResponse(

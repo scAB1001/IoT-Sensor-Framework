@@ -39,7 +39,7 @@ print_indent() {
 
 # Check dependencies
 check() {
-    print_header "Checking Dependencies"
+    print_header "Checking Java Dependencies"
     if ! command -v javac &> /dev/null
     then
         print_error "javac could not be found. Please install JDK to proceed."
@@ -85,7 +85,7 @@ compile_all() {
 }
 
 compile_specific() {
-    local file="$@"
+    local file="$1"
     print_info "Compiling $file..."
     javac -cp ".:$JDBC_JAR" $file
 
@@ -99,8 +99,9 @@ compile_specific() {
 }
 
 execute() {
-    # Convert $2 which is .java to class name by removing .java
-    class_name="${2%.java}"
+    # Convert .java to class name by removing .java
+    local file="$1"
+    class_name="${file%.java}"
     print_info "Executing: $class_name"
 
     java "$class_name"
@@ -156,13 +157,12 @@ case "$1" in
         compile_all
         ;;
     "exec"|"execute")
-        print_header "Building and Executing specified file"
         if [ -n "$2" ]; then
+            print_header "Building and Executing $2"
             compile_specific "$2"
 
             if [ $? -eq 0 ]; then
-                # Pass in $2 to execute function
-                execute "$@"
+                execute "$2"
             else
                 print_error "Compilation failed"
                 exit 1

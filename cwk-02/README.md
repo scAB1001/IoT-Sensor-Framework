@@ -1,5 +1,5 @@
 
-# Internet of Things (IoT) simulation Framework (COMP3811 Coursework 2 - 2025)
+# Internet of Things (IoT) Simulated Sensor Network \\ (COMP3811 Coursework 2 - 2025)
 
 
 ## Description
@@ -15,12 +15,34 @@ Raw Text: `https://www.youtube.com/embed/Ts7zStJf9dw`
 [![alt text](THUMBNAIL.png)](https://youtu.be/Ts7zStJf9dw)
 
 ---
+<iframe width="1285" height="723" src="https://www.youtube.com/embed/Ts7zStJf9dw?autoplay=1&mute=1" title="IoT Sensor Network Tests (Coursework 2) - November 2025" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## Installation
+
 
 ### Prerequisites
 
 A machine using a Linux distribution for its operating system and access to Admin privileges are required to run shell scripts and executables.
+For example, my machine is running Linux-mint:
+
+```bash
+NAME="Linux Mint"
+VERSION="22.2 (Zara)"
+ID=linuxmint
+ID_LIKE="ubuntu debian"
+PRETTY_NAME="Linux Mint 22.2"
+VERSION_ID="22.2"
+HOME_URL="https://www.linuxmint.com/"
+SUPPORT_URL="https://forums.linuxmint.com/"
+BUG_REPORT_URL="http://linuxmint-troubleshooting-guide.readthedocs.io/en/latest/"
+PRIVACY_POLICY_URL="https://www.linuxmint.com/"
+VERSION_CODENAME=zara
+UBUNTU_CODENAME=noble
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=24.04
+DISTRIB_CODENAME=noble
+DISTRIB_DESCRIPTION="Ubuntu Noble Numbat"
+```
 
 
 ### Requirements
@@ -61,7 +83,7 @@ Java was used for the database creation and querying during development:
 
 ## Usage
 
-Ensure prerequisites are satisfied to begin with the setup. \\
+Ensure prerequisites are satisfied to begin with the setup. \
 
 ### Setup
 
@@ -215,7 +237,7 @@ OpenJDK 64-Bit Server VM (build 25+36-Ubuntu-124.04.2, mixed mode, sharing)
 
 ### Executing Tasks
 
-In order to execute the tasks, we must ensure both the Azure Database and Function App are running. \\
+In order to execute the tasks, we must ensure both the Azure Database and Function App are running. \
 The Database will appear offline until you create or query the database for the first time -or your request times out as the resource is starting. In that case, retry.
 
 To run and verify each of these tasks, the relevant endpoint is called and a JSON output can be extracted. Furthermore, the `QueryDB.java` file is ran to further verify and provide a more detailed insight.
@@ -298,7 +320,7 @@ Select an option (1-4):
 
 3. **Task 3**
 
-For this task, you must uncomment and redeploy the code to Azure, so that the new changes take effect. This was commented out to avoid the function running in the background and wasting money and energy. \\
+For this task, you must uncomment and redeploy the code to Azure, so that the new changes take effect. This was commented out to avoid the function running in the background and wasting money and energy. \
 
 This task simply activates the schedule and enables the database change trigger on startup. This means that every T seconds.
 

@@ -5,20 +5,16 @@
 ## Description
 
 The following README provides a guide to my COMP3811 Coursework 2 solution.
-To run...
-
+The guide follows how I have implemented and performed the tasks.
 
 ## Demonstration (Video)
 
-Embedded link: [(https://www.youtube.com/embed/Ts7zStJf9dw)](https://www.youtube.com/embed/Ts7zStJf9dw)
-Raw Text: https://www.youtube.com/embed/Ts7zStJf9dw
+Embedded link: [https://www.youtube.com/embed/Ts7zStJf9dw](https://www.youtube.com/embed/Ts7zStJf9dw) \
+Raw Text: `https://www.youtube.com/embed/Ts7zStJf9dw`
 
 [![alt text](THUMBNAIL.png)](https://youtu.be/Ts7zStJf9dw)
 
 ---
-
-<iframe width="1285" height="723" src="" title="IoT Sensor Network Tests (Coursework 2) - November 2025" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
 
 ## Installation
 
@@ -29,7 +25,7 @@ A machine using a Linux distribution for its operating system and access to Admi
 
 ### Requirements
 
-A file `requirements.txt` has been provided which includes all *version specific* packages needed to run this project. \\
+A file `requirements.txt` has been provided which includes all *version specific* packages needed to run this project. \
 If errors arise with specific versions, remove the constraint on each line so that each package simply looks like this: `azure-functions` -omitting the `==0.0.0`.
 
 *Note: The core coursework function tasks only require that **azure-functions** is installed. The rest pertains to performance testing and Java database creation*

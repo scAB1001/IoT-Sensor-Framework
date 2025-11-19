@@ -27,7 +27,7 @@ Raw Text: `https://www.youtube.com/embed/Ts7zStJf9dw`
 ### Prerequisites
 
 A machine using a Linux distribution for its operating system and access to Admin privileges are required to run shell scripts and executables.
-For example, my machine is running Linux-mint:
+For example, my machine is running *Linux-mint*:
 
 ```bash
 NAME="Linux Mint"
@@ -87,7 +87,7 @@ Java was used for the database creation and querying during development:
 
 ## Usage
 
-Ensure prerequisites are satisfied to begin with the setup. \
+Ensure prerequisites are satisfied to begin with the setup.
 
 ### Setup
 
@@ -242,7 +242,7 @@ OpenJDK 64-Bit Server VM (build 25+36-Ubuntu-124.04.2, mixed mode, sharing)
 ### Executing Tasks
 
 In order to execute the tasks, we must ensure both the Azure Database and Function App are running. \
-The Database will appear offline until you create or query the database for the first time -or your request times out as the resource is starting. In that case, retry.
+The Database will appear offline until you create or query the database for the first time -or your request times out as the resource is starting. In that case: retry.
 
 To run and verify each of these tasks, the relevant endpoint is called and a JSON output can be extracted. Furthermore, the `QueryDB.java` file is ran to further verify and provide a more detailed insight.
 TODO: Include via shell script
@@ -324,7 +324,7 @@ Select an option (1-4):
 
 3. **Task 3**
 
-For this task, you must uncomment and redeploy the code to Azure, so that the new changes take effect. This was commented out to avoid the function running in the background and wasting money and energy. \
+For this task, you must uncomment and redeploy the code to Azure, so that the new changes take effect. This was commented out to avoid the function running in the background and wasting money and energy.
 
 This task simply activates the schedule and enables the database change trigger on startup. This means that every T seconds.
 

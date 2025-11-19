@@ -2,7 +2,7 @@
 azfunc/local.settings.json
 venv/
 .venv/
-.vscode/
+
 __pycache__/
 config.properties
 sqljdbc_12.8/

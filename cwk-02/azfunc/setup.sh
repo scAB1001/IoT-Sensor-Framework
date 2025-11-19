@@ -105,7 +105,7 @@ show_usage() {
     echo -e "${BLUE}Commands:${NC}"
     echo "  check, ch                           - Check for required dependencies"
     echo "  init, in                            - Initialize the Python virtual environment"
-    echo "  is_activated, ia                   - Check if the virtual environment is activated"
+    echo "  is_activated, ia                    - Check if the virtual environment is activated"
     echo "  populate, pop                       - Populate the virtual environment with required packages"
     echo ""
     echo -e "${BLUE}Examples:${NC}"

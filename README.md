@@ -1,5 +1,5 @@
 
-# Internet of Things (IoT) Simulated Sensor Network \ (COMP3811 Coursework 2 - 2025)
+# Internet of Things (IoT) Simulated Sensor Network (COMP3811 Coursework 2 - 2025)
 
 
 ## Description
@@ -16,8 +16,8 @@ The guide follows how I have implemented and performed the tasks.
 
 ---
 
-Embedded link: [https://www.youtube.com/embed/Ts7zStJf9dw](https://www.youtube.com/embed/Ts7zStJf9dw) \
 Raw Text: `https://www.youtube.com/embed/Ts7zStJf9dw`
+Embedded link: [https://www.youtube.com/embed/Ts7zStJf9dw](https://www.youtube.com/embed/Ts7zStJf9dw) \
 
 
 ## Installation
@@ -503,9 +503,28 @@ root/
 
 ## Project status
 
-Tis project had a short deadline and development was delayed due to other ongoing courseworks. I would have liked to implement cleaner, more modularised and user-friendly code. If time permits, I will return to this project, however, this will not contribute to the coursework grade.
+This project had a short deadline and development was delayed due to other ongoing courseworks. I would have liked to implement cleaner, more modularised and user-friendly code. If time permits, I will return to this project, however, this will not contribute to the coursework grade.
 
 
 ## Reference Material
 
-- TODO: Include all MS Azure sites used and code found online.
+- [1] Oracle. 2025. *Java JDBC API*. [Online]. [Accessed 18 November 2025]. Available from: [https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/](https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/)
+
+- [2] Microsoft Learn. 2025. *Quickstart: Create a single database - Azure SQL Database*. [Online]. [Accessed 18 November 2025]. Available from: [https://learn.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?view=azuresql&tabs=azure-portal](https://learn.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?view=azuresql&tabs=azure-portal)
+
+- [3] Microsoft Learn. 2025. *Create a function app in the Azure portal*. [Online]. [Accessed 18 November 2025]. Available from: [https://learn.microsoft.com/en-us/azure/azure-functions/functions-create-function-app-portal?tabs=core-tools&pivots=flex-consumption-plan](https://learn.microsoft.com/en-us/azure/azure-functions/functions-create-function-app-portal?tabs=core-tools&pivots=flex-consumption-plan)
+
+- [4] Python Docs. 2025. *ThreadPoolExecutor*. [Online]. [Accessed 18 November 2025]. Available from: [https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor](https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor)
+
+- [5] Microsoft Learn. 2025. *Timer trigger for Azure Functions*. [Online]. [Accessed 18 November 2025]. Available from: [https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=python-v2%2Cisolated-process%2Cnodejs-v4&pivots=programming-language-python](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=python-v2%2Cisolated-process%2Cnodejs-v4&pivots=programming-language-python)
+
+- [6] Microsoft Learn. 2025. *Azure SQL trigger for Functions*. [Online]. [Accessed 18 November 2025]. Available from: [https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-azure-sql-trigger?tabs=isolated-process%2Cpython-v2%2Cportal&pivots=programming-language-python](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-azure-sql-trigger?tabs=isolated-process%2Cpython-v2%2Cportal&pivots=programming-language-python)
+
+
+
+
+
+
+
+
+

@@ -4,7 +4,7 @@ venv/
 .venv/
 .vscode/
 __pycache__/
-# config.properties
+config.properties
 sqljdbc_12.8/
 
 # Byte-compiled / optimized / DLL files
@@ -59,7 +59,7 @@ venv.bak/
 bin
 obj
 appsettings.json
-# local.settings.json
+local.settings.json
 
 # Azurite artifacts
 __blobstorage__

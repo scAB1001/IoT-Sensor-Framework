@@ -102,6 +102,7 @@ def statistics_function(req, sensorData):
         return func.HttpResponse(error_response, mimetype="application/json", status_code=500)
 
 
+# UNCOMMENT TO ENABLE TASK 3(a)
 # ========== TASK 3(a): Scheduled Data Collection ==========
 # # Schedule format is CRON: second minute hour day month day-of-week
 # @app.function_name(name="ScheduledDataCollection")
@@ -155,6 +156,7 @@ def statistics_function(req, sensorData):
         logging.error("Scheduled data collection failed: %s", str(e))
 
 
+# UNCOMMENT TO ENABLE TASK 3(b) AND 3(c)
 # ========== TASK 3(b): SQL Trigger for Automatic Statistics ==========
 # @app.function_name(name="SensorDataChangeTrigger")
 # @app.sql_trigger(arg_name="changes",

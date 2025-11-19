@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# IoT Framework Script - COMP3211 CWK2
+# IoT Sensor Network Script - COMP3211 CWK2
 
 # Colors for output
 RED='\033[0;31m'
@@ -10,6 +10,7 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
+# Change this for your Azure Function App URL (will be different due to firewall settings)
 BASE_URL="https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api"
 
 print_header() {
@@ -111,10 +112,21 @@ deploy_functions() {
 
 check_azure_status() {
     print_header "Checking Azure Functions and Database Status"
-
-    # Test by calling statistics endpoint with dummy request
+    print_info "Pinging Azure Functions and Database..."
 
     # Test by calling simulate-data endpoint with dummy request
+    response1=$(curl -s "${BASE_URL}/simulate-data")
+
+    # Check response with curl
+    curl_response "$response1" "Data insertion for trigger successful" "Failed to insert data for trigger"
+    # Test by calling statistics endpoint with dummy request
+    response2=$(curl -s "${BASE_URL}/statistics")
+    
+    # Check response with curl
+    curl_response "$response2" "Statistics calculation successful" "Failed to calculate statistics"
+    print_success "Azure Functions: ONLINE"
+    query_db
+    print_success "Database Connection: ONLINE"
 }
 
 test_task1() {
@@ -159,7 +171,6 @@ test_task2() {
     query_db
 }
 
-# TODO:
 test_task_3a() {
     print_header "TASK 3(a): Testing Scheduled Data Collection"
 
@@ -257,7 +268,7 @@ case "${1:-}" in
         query_db
         ;;
     "st"|"status")
-        show_status
+        check_azure_status
         ;;
     *)
         show_usage

@@ -1,5 +1,5 @@
 
-# Internet of Things (IoT) Simulated Sensor Network \\ (COMP3811 Coursework 2 - 2025)
+# Internet of Things (IoT) Simulated Sensor Network \ (COMP3811 Coursework 2 - 2025)
 
 
 ## Description
@@ -9,17 +9,16 @@ The guide follows how I have implemented and performed the tasks.
 
 ## Demonstration Video
 
-Embedded link: [https://www.youtube.com/embed/Ts7zStJf9dw](https://www.youtube.com/embed/Ts7zStJf9dw) \
-Raw Text: `https://www.youtube.com/embed/Ts7zStJf9dw`
-
-[![alt text](./assets/thumbnail.png)](https://youtu.be/Ts7zStJf9dw)
-
-
----
 
 ### Preview
 
 ![IoT Simulation Demonstration](./assets/task_1.gif)
+
+---
+
+Embedded link: [https://www.youtube.com/embed/Ts7zStJf9dw](https://www.youtube.com/embed/Ts7zStJf9dw) \
+Raw Text: `https://www.youtube.com/embed/Ts7zStJf9dw`
+
 
 ## Installation
 
@@ -82,14 +81,19 @@ Java was used for the database creation and querying during development:
 - *javac 25*
 - Microsoft JDBC Driver for SQL Server version 12.8, providing mssql-jdbc-12.8.0.jre8.jar and mssql-jdbc-12.8.0.jre11.jar class library files. (JAR files were included in my machine's *classpath*)
 
-*Note: The CreateDB.java template file, QueryDB.java template file and JDBC Driver with the corresponding JAR files were provided as part of the in-course lab materials in a file *sqljdbc_12.8.1.0_enu.zip*
+*Note: The CreateDB.java template file, QueryDB.java template file and JDBC Driver with the corresponding JAR files were provided as part of the in-course lab materials in a file **sqljdbc_12.8.1.0_enu.zip***
 
 
 ## Usage
 
 Ensure prerequisites are satisfied to begin with the setup.
 
+
 ### Setup
+
+Provide your password in the configuration files, replacing `YOUR_PASSWORD_HERE`:
+- *java-db/config.properties*
+- *azfunc/local.settings.json*
 
 
 #### Azfunc directory
@@ -170,7 +174,8 @@ Package            Version
 azure-functions    1.24.0
 # other packages...
 
-# You should now see a ((.venv)) preceding your active terminal input line
+# You should now see a ((.venv)) preceding your active terminal input line e.g.,
+((.venv) ) andreas@Lenovo-V15-G4-AMN:~/github-projects/uni/comp3211/cwk-02/azfunc$
 ```
 
 
@@ -245,7 +250,6 @@ In order to execute the tasks, we must ensure both the Azure Database and Functi
 The Database will appear offline until you create or query the database for the first time -or your request times out as the resource is starting. In that case: retry.
 
 To run and verify each of these tasks, the relevant endpoint is called and a JSON output can be extracted. Furthermore, the `QueryDB.java` file is ran to further verify and provide a more detailed insight.
-TODO: Include via shell script
 
 Within the azfunc/ directory, a shell script, `exec.sh`, has been provided for simplicity.
 
@@ -260,7 +264,7 @@ root/
 │   └── *.json                   # Configuration files
 ├── java-db/
 ```
-0. **Pre-test: Setup**
+1. **Pre-test: Setup**
 
 We must execute all tests under the same variables, within the same environment.
 
@@ -279,6 +283,102 @@ chmod +x ./exec.sh
 ```
 
 A successful example output can be seen below:
+
+```bash
+# Output for check
+========================================
+  Checking Data Transfer Dependencies
+========================================
+✅  curl is installed.
+    curl 8.5.0 (x86_64-pc-linux-gnu) libcurl/8.5.0 OpenSSL/3.0.13 zlib/1.3 brotli/1.1.0 zstd/1.5.5 libidn2/2.3.7 libpsl/0.21.2 (+libidn2/2.3.7) libssh/0.10.6/openssl/zlib nghttp2/1.59.0 librtmp/2.3 OpenLDAP/2.6.7
+
+========================================
+  Checking Virtual Environment Status
+========================================
+✅  Virtual environment is activated.
+ℹ️  Use command 'deactivate' to exit the virtual environment.
+
+========================================
+  Checking Azure SQL Database Status
+========================================
+ℹ️  Querying database for verification...
+
+========================================
+  Building and Executing QueryDB.java
+========================================
+ℹ️  Compiling QueryDB.java...
+✅  Compilation successful
+ℹ️  Executing: QueryDB
+Connected to Azure SQL Database
+
+=== DATABASE STATISTICS ===
+Total records: 5420
+Unique sensors: 20
+Date range: 2025-11-18 23:14:36 to 2025-11-19 00:26:10
+
+=== QUERY MENU ===
+1. View data grouped by sensor
+2. View data grouped by timestamp
+3. View data for a specific sensor
+4. Exit
+Select an option (1-4):
+
+
+# Output for azure status
+========================================
+  Checking Azure Functions and Database Status
+========================================
+ℹ️  Pinging Azure Functions and Database...
+{
+    "timestamp": "2025-11-19T01:09:11.019220+00:00",
+    "sensor_count": 20,
+    "sensors": [
+        {
+            "sensor_id": 1,
+            "temperature": 9.3,
+            # and so on...
+        },
+        {
+            "sensor_id": 2,
+            # and so on...
+        }
+    ],
+    "database_status": "Stored 20 records"
+}
+✅ Data insertion for trigger successful
+{
+    "timestamp": "2025-11-19T01:09:14.590881+00:00",
+    "data_analyzed": 5440,
+    "analytics": [
+        [
+            1,
+            {
+                "temperature": {
+                    "minimum": 5.1,
+                    "maximum": 17.9,
+                    "average": 11.57
+                },
+                "wind_speed": {
+                    # and so on...
+                # and so on...
+                }
+            }
+        ], # and so on...
+    ]
+}
+✅ Statistics calculation successful
+✅ Azure Functions: ONLINE
+ℹ️  Querying database for verification...
+Connected to Azure SQL Database
+
+=== DATABASE STATISTICS ===
+Total records: 5440
+# and so on...
+
+=== QUERY MENU ===
+1. View data grouped by sensor
+# and so on...
+```
 
 1. **Task 1: Data Simulation**
 
@@ -326,7 +426,7 @@ Select an option (1-4):
 
 For this task, you must uncomment and redeploy the code to Azure, so that the new changes take effect. This was commented out to avoid the function running in the background and wasting money and energy.
 
-This task simply activates the schedule and enables the database change trigger on startup. This means that every T seconds.
+This task simply activates the schedule and enables the database change trigger on startup. This means that every *T* seconds.
 
 ```bash
 # Tests the chron schedule, redeploys, queries database, verifies regular intervals
@@ -368,16 +468,14 @@ Functions in func-app-sc222ab:
     StatisticsFunction - [httpTrigger]
         Invoke url: https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/statistics
 
-✅ Deployment completed successfully!
+✅  Deployment completed successfully!
 ℹ️  Waiting 20s for scheduled data collection to occur...
 ℹ️  Verifying scheduled data collection...
 ℹ️  Querying database for verification...
 Connected to Azure SQL Database
 
 === DATABASE STATISTICS ===
-Total records: 2260
-Unique sensors: 20
-Date range: 2025-11-18 23:14:36 to 2025-11-19 00:00:00
+# and so on...
 
 === QUERY MENU ===
 # and so on...

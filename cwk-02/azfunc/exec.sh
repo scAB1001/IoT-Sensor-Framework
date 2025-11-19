@@ -118,8 +118,6 @@ check_azure_status() {
 }
 
 test_task1() {
-    check
-
     print_header "TASK 1: Testing Sensor Data Simulation"
     print_info "Generating data for 20 sensors..."
 
@@ -162,33 +160,42 @@ test_task2() {
 }
 
 # TODO:
-test_task3() {
-    print_header "TASK 3: Testing Automated Pipeline"
+test_task_3a() {
+    print_header "TASK 3(a): Testing Scheduled Data Collection"
 
-    print_info "Step 3(a): Generating data to trigger automation..."
-    response=$(curl -s "${BASE_URL}/simulate-data?sensor_count=3")
-
-    if echo "$response" | python3 -c "import json, sys; json.load(sys.stdin); print('valid')" 2>/dev/null | grep -q "valid"; then
-        print_success "Step 3(a) - Data generated successfully"
-
-        print_info "Step 3(b/c): Checking database (automatic trigger should run in background)..."
-        sleep 3
-
-        # Check statistics to verify pipeline worked
-        stats_response=$(curl -s "${BASE_URL}/statistics")
-        if echo "$stats_response" | python3 -c "import json, sys; data=json.load(sys.stdin); print('valid' if data.get('data_analyzed', 0) > 0 else 'empty')" 2>/dev/null | grep -q "valid"; then
-            print_success "Task 3 - Automated pipeline working!"
-            echo "Latest statistics:"
-            data_analyzed=$(echo "$stats_response" | python3 -c "import json, sys; data=json.load(sys.stdin); print(data.get('data_analyzed', 0))")
-            echo "$data_analyzed"
-        else
-            print_warning "Task 3 - Pipeline may need time to trigger (check Azure logs)"
-        fi
-    else
-        print_error "Task 3 - Failed to generate test data"
-    fi
+    print_info "Changing cron schedule to every 10 seconds..."
+    # CHANGE CRON SCHEDULE IN function_app.py TO EVERY 10 SECONDS
+    # UNCOMMENT DATA BASE CHANGE TRIGGER IN function_app.py
+    deploy_functions
+    # Wait for some time to allow scheduled function to run
+    print_info "Waiting 20s for scheduled data collection to occur..."
+    sleep 20
+    print_info "Verifying scheduled data collection..."
+    query_db
+    # See 20 seconds (2 schedule cycles) of data collected
 }
 
+test_task_3bc() {
+    print_header "TASK 3(b) & 3(c): Testing Database Trigger and Automatic Statistics Calculation"
+
+    print_info "Inserting new sensor data to trigger database change..."
+    response=$(curl -s "${BASE_URL}/simulate-data")
+
+    # Check response with curl
+    curl_response "$response" "Data insertion for trigger successful" "Failed to insert data for trigger"
+
+    print_info "Waiting 10s for automatic statistics calculation to occur..."
+    sleep 10
+
+    print_info "Verifying automatic statistics calculation..."
+    query_db
+}
+
+performance_test() {
+    print_header "Testing Function Scalability and Performance"
+    python3 ./performance_test.py
+    # print_info "This feature is under development."
+}
 
 show_usage() {
     echo -e "${CYAN}IoT Framework Test Script${NC}"
@@ -199,11 +206,13 @@ show_usage() {
     echo -e "  check, ch                - Check for required dependencies"
     echo -e "  task1, t1                - Test Task 1 (Data Simulation)"
     echo -e "  task2, t2                - Test Task 2 (Statistics)"
-    echo -e "  task3, t3                - Test Task 3 (Automated Pipeline)"
+    echo -e "  task3a, t3a              - Test Task 3(a) (Scheduled Data Collection)"
+    echo -e "  task3bc, t3bc            - Test Task 3(b) & 3(c) (Database Trigger and Automatic Statistics)"
+    echo -e "  all, a                   - Run all tests"
+    echo -e "  performance, per         - Run performance tests"
     echo -e "  deploy, dep              - Deploy functions to Azure"
     echo -e "  query, q                 - Query database for verification"
     echo -e "  status, st               - Check azure status"
-    echo -e "  all, a                   - Run all tests"
     print_info "Base URL: $BASE_URL"
     echo ""
     echo -e "${BLUE}Examples:${NC}"
@@ -216,14 +225,30 @@ show_usage() {
 }
 
 case "${1:-}" in
+    "ch"|"check")
+        check
+        ;;
     "t1"|"task1")
         test_task1
         ;;
     "t2"|"task2")
         test_task2
         ;;
-    "t3"|"task3")
+    "t3a"|"task3a")
+        test_task_3a
+        ;;
+    "t3bc"|"task3bc")
+        test_task_3bc
+        ;;
+    "a"|"all")
+        test_task1
+        echo
+        test_task2
+        echo
         test_task3
+        ;;
+    "per"|"performance")
+        performance_test
         ;;
     "dep"|"deploy")
         deploy_functions
@@ -233,13 +258,6 @@ case "${1:-}" in
         ;;
     "st"|"status")
         show_status
-        ;;
-    "a"|"all")
-        test_task1
-        echo
-        test_task2
-        echo
-        test_task3
         ;;
     *)
         show_usage

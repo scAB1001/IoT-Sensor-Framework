@@ -12,6 +12,12 @@ To run...
 
 TODO: Insert YT video link
 
+[![alt text](THUMBNAIL.png)](https://youtu.be/Ts7zStJf9dw)
+
+---
+
+<iframe width="1285" height="723" src="https://www.youtube.com/embed/Ts7zStJf9dw" title="IoT Sensor Network Tests (Coursework 2) - November 2025" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 
 ## Installation
 
@@ -23,7 +29,7 @@ A machine using a Linux distribution for its operating system and access to Admi
 ### Requirements
 
 A file `requirements.txt` has been provided which includes all *version specific* packages needed to run this project. \\
-If errors arise with specific versions, remove the constraint on each line so that each package simply looks like this: `azure-functions` -omitting the `==0.0.0.`.
+If errors arise with specific versions, remove the constraint on each line so that each package simply looks like this: `azure-functions` -omitting the `==0.0.0`.
 
 *Note: The core coursework function tasks only require that **azure-functions** is installed. The rest pertains to performance testing and Java database creation*
 
@@ -65,7 +71,7 @@ Ensure prerequisites are satisfied to begin with the setup. \\
 
 #### Azfunc directory
 
-within the azfunc/ directory, a shell script, `setup.sh`, has been provided for simplicity.
+Within the azfunc/ directory, a shell script, `setup.sh`, has been provided for simplicity.
 
 **Focused structural view**
 
@@ -74,12 +80,11 @@ root/
 ├── azfunc/
 │   ├── *.py                     # Python files
 │   ├── setup.sh                 # Setup script
-│   ├── exec.sh                  # Test script
 │   └── *.json                   # Configuration files
 ├── java-db/
 ```
 
-Enable and Execute this script
+Run the following:
 
 ```bash
 # Ensure you are in the azure function directory
@@ -148,7 +153,7 @@ azure-functions    1.24.0
 
 #### Java Database directory
 
-within the java-db/ directory, a shell script, `build.sh`, has been provided for simplicity.
+Within the java-db/ directory, a shell script, `build.sh`, has been provided for simplicity.
 
 **Focused structural view**
 
@@ -163,7 +168,7 @@ root/
 ├── azfunc/
 ```
 
-Enable and Execute this script
+Run the following:
 
 ```bash
 # Ensure you are in the java database directory
@@ -213,52 +218,147 @@ OpenJDK 64-Bit Server VM (build 25+36-Ubuntu-124.04.2, mixed mode, sharing)
 
 ### Executing Tasks
 
-Ensure both the Azure Database and Function App are running. \\
-The Database will appear offline until you create or query the database for the first time.
+In order to execute the tasks, we must ensure both the Azure Database and Function App are running. \\
+The Database will appear offline until you create or query the database for the first time -or your request times out as the resource is starting. In that case, retry.
 
 To run and verify each of these tasks, the relevant endpoint is called and a JSON output can be extracted. Furthermore, the `QueryDB.java` file is ran to further verify and provide a more detailed insight.
 TODO: Include via shell script
 
-**Task 1**
-Will call the first Data Simulation function.
-```bash
-# Call the function endpoint with optional sensor count specified via <?sensor_count=>
-curl "https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/simulate-data?sensor_count=20"
+Within the azfunc/ directory, a shell script, `exec.sh`, has been provided for simplicity.
 
-# Example output
-TODO: Example JSON output
+**Focused structural view**
 
-
-TODO: Shell script to do this!
-# See verbose insights
-java QueryDB
-
-# Example output
-
+```text
+root/
+├── azfunc/
+│   ├── *.py                     # Python files
+│   ├── setup.sh                 # Setup script
+│   ├── exec.sh                  # Test script
+│   └── *.json                   # Configuration files
+├── java-db/
 ```
+0. **Pre-test: Setup**
 
-**Task 2**
+We must execute all tests under the same variables, within the same environment.
 
 ```bash
-# Call the function endpoint
-curl "https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/statistics"
+# Ensure you are in the azure function directory
+cd ./azfunc/
 
-# Example output
-TODO: Example JSON output
+# Make this file executable
+chmod +x ./exec.sh
 
+# Check for required dependencies
+./exec.sh check
 
-# See verbose insights
-java QueryDB
-
-# Example output
-
+# Check the current status of the Azure Resources
+./exec.sh status
 ```
 
-**Task 3**
+A successful example output can be seen below:
 
-For this task, you must uncomment and redeploy the code to Azure, so that the new changes take effect. This was commented out to avoid the function running when I am not actively using it. \\
+1. **Task 1: Data Simulation**
 
-This tasks simply activates the schedule and enables the database change trigger on startup. This means that every T seconds (**TODO**: MODIFIABLE).
+We expect a function to generate data and then store it in our database.
+
+We will call the Data Simulation function.
+
+```bash
+# Run task 1: Make a GET request to endpoint '/simulate-data', verify success
+./exec.sh task1
+```
+
+A successful example output can be seen below:
+
+2. **Task 2**
+
+We expect a function to retrieve existing data and then another to calculate its statistics.
+
+We will call the Data Statistics function.
+
+```bash
+# Run task 2: Make a GET request to endpoint '/statistics', verify success
+./exec.sh task2
+```
+
+A successful example output can be seen below:
+
+```bash
+Connected to Azure SQL Database
+
+=== DATABASE STATISTICS ===
+Total records: 5300
+Unique sensors: 20
+Date range: 2025-11-18 23:14:36 to 2025-11-19 00:25:10
+
+=== QUERY MENU ===
+1. View data grouped by sensor
+2. View data grouped by timestamp
+3. View data for a specific sensor
+4. Exit
+Select an option (1-4):
+```
+
+3. **Task 3**
+
+For this task, you must uncomment and redeploy the code to Azure, so that the new changes take effect. This was commented out to avoid the function running in the background and wasting money and energy. \\
+
+This task simply activates the schedule and enables the database change trigger on startup. This means that every T seconds.
+
+```bash
+# Tests the chron schedule, redeploys, queries database, verifies regular intervals
+./exec.sh task3a
+
+# Tests the automatic database trigger and automatic statistics function
+./exec.sh task3b
+```
+
+A successful example output can be seen below:
+
+```bash
+# Deployment output
+Getting site publishing info...
+[2025-11-18T19:54:13.234Z] Starting the function app deployment...
+[2025-11-18T19:54:13.240Z] Creating archive for current directory...
+Performing remote build for functions project.
+Deleting the old .python_packages directory
+Uploading 337.95 KB [#############################################################################]
+Deployment in progress, please wait...
+Starting deployment pipeline.
+[Kudu-SourcePackageUriDownloadStep] Skipping download. Zip package is present at /tmp/zipdeploy/31444265-c815-4ac3-8a6c-ec12e27a0b06.zip
+[Kudu-ValidationStep] starting.
+[Kudu-ValidationStep] completed.
+# other steps...
+
+Checking the app health...Host status endpoint: https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/admin/host/status
+. done
+Host status: {"id":"7e2c7da6b9d556f8ec5140e450763bd3","state":"Running","version":"4.1044.400.0","versionDetails":"4.1044.400-dev.0.0+ac5f4d4d963db7316fa7516d0b349528452421b4","platformVersion":"","instanceId":"0--3ab66b92-133a-4f28-a926-a9d088e033ac","computerName":"","processUptime":187086,"functionAppContentEditingState":"NotAllowed","extensionBundle":{"id":"Microsoft.Azure.Functions.ExtensionBundle","version":"4.29.0"}}
+[2025-11-18T19:56:41.403Z] The deployment was successful!
+Functions in func-app-sc222ab:
+    ScheduledDataCollection - [timerTrigger]
+
+    SensorDataChangeTrigger - [sqlTrigger]
+
+    SimulateDataFunction - [httpTrigger]
+        Invoke url: https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/simulate-data
+
+    StatisticsFunction - [httpTrigger]
+        Invoke url: https://func-app-sc222ab-ahekeeg5b7e3bge9.uksouth-01.azurewebsites.net/api/statistics
+
+✅ Deployment completed successfully!
+ℹ️  Waiting 20s for scheduled data collection to occur...
+ℹ️  Verifying scheduled data collection...
+ℹ️  Querying database for verification...
+Connected to Azure SQL Database
+
+=== DATABASE STATISTICS ===
+Total records: 2260
+Unique sensors: 20
+Date range: 2025-11-18 23:14:36 to 2025-11-19 00:00:00
+
+=== QUERY MENU ===
+# and so on...
+```
 
 
 ### Project Structure

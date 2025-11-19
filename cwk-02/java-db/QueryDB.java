@@ -141,8 +141,8 @@ public class QueryDB {
     }
 
 
-    public static void queryAllData(Connection database) throws SQLException {
-        querySensorData(database, "timestamp DESC", null, "=== ALL SENSOR DATA ===");
+    public static void queryByTimestamp(Connection database) throws SQLException {
+        querySensorData(database, "timestamp", null, "=== ALL SENSOR DATA ===");
     }
 
     public static void queryBySensor(Connection database) throws SQLException {
@@ -163,10 +163,10 @@ public class QueryDB {
                 if (sensorId >= 1 && sensorId <= 20) {
                     validInput = true;
                 } else {
-                    System.out.println("❌ Invalid sensor ID: " + sensorId + ". Please enter a number between 1-20.");
+                    System.out.println("=Invalid sensor ID: " + sensorId + ". Please enter a number between 1-20.");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("❌ Invalid input. Please enter a number between 1-20.");
+                System.out.println("=Invalid input. Please enter a number between 1-20.");
             }
         }
 
@@ -219,9 +219,10 @@ public class QueryDB {
         while (true) {
             System.out.println("\n=== QUERY MENU ===");
             System.out.println("1. View data grouped by sensor");
-            System.out.println("2. View data for a specific sensor");
-            System.out.println("3. Exit");
-            System.out.print("Select an option (1-3): ");
+            System.out.println("2. View data grouped by timestamp");
+            System.out.println("3. View data for a specific sensor");
+            System.out.println("4. Exit");
+            System.out.print("Select an option (1-4): ");
 
             String choice = scanner.nextLine();
 
@@ -230,9 +231,12 @@ public class QueryDB {
                     queryBySensor(database);
                     break;
                 case "2":
-                    querySensorById(database, scanner);
+                    queryByTimestamp(database);
                     break;
                 case "3":
+                    querySensorById(database, scanner);
+                    break;
+                case "4":
                     System.out.println("Exiting...");
                     scanner.close();
                     return;
@@ -246,14 +250,14 @@ public class QueryDB {
         Connection database = null;
         try {
             database = getConnection();
-            System.out.println("✅ Connected to Azure SQL Database");
+            System.out.println("Connected to Azure SQL Database");
 
             getDatabaseStats(database);
 
             menu(database);
 
         } catch (Exception error) {
-            System.err.println("❌ Database query failed:");
+            System.err.println("Database query failed:");
             error.printStackTrace();
         } finally {
             if (database != null) {

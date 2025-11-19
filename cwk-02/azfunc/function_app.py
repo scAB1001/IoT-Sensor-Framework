@@ -7,7 +7,7 @@ from statistics_function import analyze_data_per_sensor
 # Initialize the Function App with anonymous HTTP access
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
-# Task 1: Simulate Data Function
+# ========== TASK 1: Simulate Data Function ==========
 @app.function_name(name="SimulateDataFunction")
 @app.route(route="simulate-data", methods=["GET"])
 @app.sql_output(arg_name="sensorRecords",
@@ -54,7 +54,8 @@ def simulate_data_function(req, sensorRecords):
         error_response = json.dumps({"error": f"Simulation failed: {str(e)}"})
         return func.HttpResponse(error_response, mimetype="application/json", status_code=500)
 
-# Task 2: Statistics Function
+
+# ========== TASK 2: Statistics Function ==========
 @app.function_name(name="StatisticsFunction")
 @app.route(route="statistics", methods=["GET"])
 @app.sql_input(arg_name="sensorData",
@@ -101,10 +102,11 @@ def statistics_function(req, sensorData):
         return func.HttpResponse(error_response, mimetype="application/json", status_code=500)
 
 
-# # ========== TASK 3(a): Scheduled Data Collection ==========
-# # THIS RUNS EVERY 10 MINUTES, COMMENTED AND REDEPLOYED.
+# ========== TASK 3(a): Scheduled Data Collection ==========
+# # Schedule format is CRON: second minute hour day month day-of-week
 # @app.function_name(name="ScheduledDataCollection")
-# @app.schedule(schedule="0 */10 * * * *", arg_name="timer", run_on_startup=True)
+# @app.schedule(schedule="*/10 * * * * *", arg_name="timer", run_on_startup=True) # Every 10 seconds
+# # @app.schedule(schedule="0 */10 * * * *", arg_name="timer", run_on_startup=True) # Every 10 minutes
 # @app.sql_output(arg_name="sensorRecords",
 #                 command_text="dbo.sensor_data",
 #                 connection_string_setting="SqlConnectionString")
@@ -114,10 +116,10 @@ def statistics_function(req, sensorData):
 #     This satisfies Task 3(a): data collection at regular interval T
 #     """
 #     try:
-#         logging.info("🕒 Scheduled data collection triggered at %s",
+#         logging.info("Scheduled data collection triggered at %s",
 #                      datetime.now(timezone.utc).isoformat())
 
-#         sensor_count = 20  # All 20 sensors as required
+#         sensor_count = 20
 #         sensor_data = generate_sensor_readings(sensor_count)
 #         timestamp = datetime.now(timezone.utc).isoformat()
 
@@ -134,15 +136,15 @@ def statistics_function(req, sensorData):
 #             })
 #             rows.append(row)
 
-#         # Store in database via binding
+#         # Store in database with binding
 #         sensorRecords.set(rows)
 
 #         logging.info(
-#             "✅ Scheduled collection: Stored data for %d sensors at %s", sensor_count, timestamp)
+#             "Scheduled collection: Stored data for %d sensors at %s", sensor_count, timestamp)
 
 #         # Log sample data for verification
 #         sample_sensor = sensor_data[0] if sensor_data else {}
-#         logging.info("📊 Sample sensor data: Sensor %d - Temp: %.1f°C, Wind: %.1f mph, Humidity: %d%%, CO2: %d ppm",
+#         logging.info("Sample sensor data: Sensor %d - Temp: %.1f°C, Wind: %.1f mph, Humidity: %d%%, CO2: %d ppm",
 #                      sample_sensor.get('sensor_id', 0),
 #                      sample_sensor.get('temperature', 0),
 #                      sample_sensor.get('wind_speed', 0),
@@ -150,10 +152,10 @@ def statistics_function(req, sensorData):
 #                      sample_sensor.get('co2_level', 0))
 
 #     except Exception as e:
-#         logging.error("❌ Scheduled data collection failed: %s", str(e))
+        logging.error("Scheduled data collection failed: %s", str(e))
 
 
-# # ========== TASK 3(b): SQL Trigger for Automatic Statistics ==========
+# ========== TASK 3(b): SQL Trigger for Automatic Statistics ==========
 # @app.function_name(name="SensorDataChangeTrigger")
 # @app.sql_trigger(arg_name="changes",
 #                  table_name="sensor_data",
@@ -177,7 +179,7 @@ def statistics_function(req, sensorData):
 #         if changes and hasattr(changes, 'get_changes'):
 #             change_count = len(changes.get_changes())
 
-#         print(f"🚀 SQL Trigger activated! Detected {change_count} changes")
+#         print(f"SQL Trigger activated! Detected {change_count} changes")
 
 #         # Convert SQL rows to Python list for analysis
 #         sensor_readings = []
@@ -192,82 +194,27 @@ def statistics_function(req, sensorData):
 #             })
 
 #         if not sensor_readings:
-#             logging.info("📭 No recent sensor data found for analysis")
+#             logging.info("No recent sensor data found for analysis")
 #             return
 
-#         # Calculate statistics using the same function as Task 2
-#         # This satisfies Task 3(c): same results as Task 2
+#         # Task 3(c): Calculate statistics using the same function as Task 2
 #         analytics = analyze_data_per_sensor(sensor_readings)
 
-#         # Log the statistics results
-#         logging.info("📈 AUTOMATIC STATISTICS CALCULATED:")
-#         logging.info("   Data analyzed: %d readings from %d sensors",
-#                      len(sensor_readings),
-#                      len(set(s['sensor_id'] for s in sensor_readings)))
+#         response_data = {
+#             "timestamp": datetime.now(timezone.utc).isoformat(),
+#             "data_analyzed": len(sensor_readings),
+#             # Sample first 3 sensors for brevity
+#             "analytics": list(analytics.items())[:3]
+#             # "analytics": analytics # Full data
+#         }
 
-#         ### Want above only
-#         # Log detailed statistics
-#         # temp_stats = analytics.get('temperature', {})
-#         # wind_stats = analytics.get('wind_speed', {})
-#         # humidity_stats = analytics.get('relative_humidity', {})
-#         # co2_stats = analytics.get('co2_level', {})
-
-#         # logging.info("   🌡️  Temperature: %.1f-%.1f°C (avg: %.1f°C)",
-#         #              temp_stats.get('minimum', 0),
-#         #              temp_stats.get('maximum', 0),
-#         #              temp_stats.get('average', 0))
-
-#         # logging.info("   💨 Wind Speed: %.1f-%.1f mph (avg: %.1f mph)",
-#         #              wind_stats.get('minimum', 0),
-#         #              wind_stats.get('maximum', 0),
-#         #              wind_stats.get('average', 0))
-
-#         # logging.info("   💧 Humidity: %d-%d%% (avg: %d%%)",
-#         #              humidity_stats.get('minimum', 0),
-#         #              humidity_stats.get('maximum', 0),
-#         #              humidity_stats.get('average', 0))
-
-#         # logging.info("   🏭 CO2 Levels: %d-%d ppm (avg: %d ppm)",
-#         #              co2_stats.get('minimum', 0),
-#         #              co2_stats.get('maximum', 0),
-#         #              co2_stats.get('average', 0))
-
-#         # # Check for environmental alerts
-#         # check_environmental_alerts(analytics)
+#         return func.HttpResponse(
+#             json.dumps(response_data, indent=2),
+#             mimetype="application/json",
+#             status_code=200
+#         )
 
 #     except Exception as e:
-#         logging.error("❌ SQL Trigger execution failed: %s", str(e))
-
-
-def check_environmental_alerts(analytics):
-    """
-    Check for environmental conditions that might require alerts
-    Enhanced feature for realistic scenario
-    """
-    try:
-        temp_stats = analytics.get('temperature', {})
-        co2_stats = analytics.get('co2_level', {})
-        humidity_stats = analytics.get('relative_humidity', {})
-
-        # Heatwave alert
-        if temp_stats.get('maximum', 0) > 25:
-            logging.warning("🔥 HEATWAVE ALERT: High temperature detected (%.1f°C)",
-                            temp_stats.get('maximum', 0))
-
-        # High pollution alert
-        if co2_stats.get('maximum', 0) > 1200:
-            logging.warning("🏭 POLLUTION ALERT: High CO2 levels detected (%d ppm)",
-                            co2_stats.get('maximum', 0))
-
-        # High humidity alert
-        if humidity_stats.get('maximum', 0) > 80:
-            logging.warning("💧 HUMIDITY ALERT: High humidity levels detected (%d%%)",
-                            humidity_stats.get('maximum', 0))
-
-        # Very low temperature alert
-        if temp_stats.get('minimum', 0) < 0:
-            logging.warning("❄️ COLD ALERT: Freezing temperatures detected (%.1f°C)",
-                            temp_stats.get('minimum', 0))
-
-    except Exception as e:
-        logging.error("Error in environmental alert checking: %s", str(e))
+#         logging.error("SQL Trigger execution failed: %s", str(e))
+#         error_response = json.dumps({"error": f"Statistics failed: {str(e)}"})
+#         return func.HttpResponse(error_response, mimetype="application/json", status_code=500)

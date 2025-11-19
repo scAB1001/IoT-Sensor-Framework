@@ -42,11 +42,10 @@ public class CreateDB {
     // /*
     try {
       statement.executeUpdate("DROP TABLE sensor_data");
-      System.out.println("⚠️ Dropped existing sensor_data table");
+      System.out.println("Dropped existing sensor_data table");
     } catch (SQLException error) {
-      // Catch and ignore SQLException, as this merely indicates
-      // that the table didn't exist in the first place!
-      System.out.println("⚠️ sensor_data table did not exist, skipping drop");
+      // Catch and ignore SQLException -table didn't exist to begin with
+      System.out.println("sensor_data table did not exist, skipping drop");
     }
     //*/
 
@@ -63,7 +62,7 @@ public class CreateDB {
         + "created_at DATETIME2 DEFAULT GETDATE())";
 
     statement.executeUpdate(createTableSQL);
-    System.out.println("✅ Created sensor_data table (or already exists)");
+    System.out.println("Created sensor_data table (or already exists)");
 
     statement.close();
   }
@@ -83,10 +82,10 @@ public class CreateDB {
           "   PRINT 'Database change tracking already enabled'";
 
       statement.executeUpdate(enableDbTracking);
-      System.out.println("✅ Database-level change tracking enabled");
+      System.out.println("Database-level change tracking enabled");
 
     } catch (SQLException e) {
-      System.err.println("❌ Failed to enable database change tracking: " + e.getMessage());
+      System.err.println("Failed to enable database change tracking: " + e.getMessage());
       throw e;
     } finally {
       statement.close();
@@ -109,10 +108,10 @@ public class CreateDB {
           "   PRINT 'Table change tracking already enabled'";
 
       statement.executeUpdate(enableTableTracking);
-      System.out.println("✅ Table-level change tracking enabled for sensor_data");
+      System.out.println("Table-level change tracking enabled for sensor_data");
 
     } catch (SQLException e) {
-      System.err.println("❌ Failed to enable table change tracking: " + e.getMessage());
+      System.err.println("=Failed to enable table change tracking: " + e.getMessage());
       throw e;
     } finally {
       statement.close();
@@ -139,7 +138,7 @@ public class CreateDB {
 
     ResultSet resultSet = statement.executeQuery(verifySQL);
 
-    System.out.println("\n🔍 CHANGE TRACKING VERIFICATION:");
+    System.out.println("\nCHANGE TRACKING VERIFICATION:");
     System.out.println("=================================");
 
     if (resultSet.next()) {
@@ -157,30 +156,15 @@ public class CreateDB {
       System.out.println("Retention: " + retention + " " + retentionUnits);
 
       if ("ENABLED".equals(status)) {
-        System.out.println("✅ READY for Azure SQL Triggers!");
+        System.out.println("READY for Azure SQL Triggers!");
       } else {
-        System.out.println("❌ NOT READY - Change tracking not properly enabled");
+        System.out.println("=NOT READY - Change tracking not properly enabled");
       }
     } else {
-      System.out.println("❌ Could not verify change tracking status");
+      System.out.println("=Could not verify change tracking status");
     }
 
     resultSet.close();
-    statement.close();
-  }
-
-  public static void insertSampleData(Connection database) throws SQLException {
-    Statement statement = database.createStatement();
-
-    // Insert some sample data to test the table
-    String insertSQL = "INSERT INTO sensor_data (sensor_id, temperature, wind_speed, relative_humidity, co2_level) VALUES \n"
-        + "(100, 15.5, 12.3, 45, 650),\n"
-        + "(101, 16.2, 14.1, 50, 720),\n"
-        + "(102, 14.8, 13.7, 48, 680)";
-
-    int rowsInserted = statement.executeUpdate(insertSQL);
-    System.out.println("✅ Inserted " + rowsInserted + " sample records for testing");
-
     statement.close();
   }
 
@@ -188,18 +172,17 @@ public class CreateDB {
     Connection database = null;
     try {
       database = getConnection();
-      System.out.println("✅ Connected to Azure SQL Database");
+      System.out.println("Connected to Azure SQL Database");
 
-      // createSensorTable(database);
-      System.out.println("✅ Database setup complete - ready for Azure Functions");
+      createSensorTable(database);
+      System.out.println("Database setup complete - ready for Azure Functions");
 
       enableDatabaseChangeTracking(database);
       enableTableChangeTracking(database);
       verifyChangeTracking(database);
-      // insertSampleData(database);
 
     } catch (Exception error) {
-      System.err.println("❌ Database setup failed:");
+      System.err.println("Database setup failed:");
       error.printStackTrace();
     } finally {
       // This will always execute, even if an exception has

@@ -493,7 +493,7 @@ root/
 │   ├── exec.sh                  # Test script
 │   └── *.json                   # Configuration files
 ├── java-db-setup/
-│   ├── CreateDB.java           # Database initialization
+│   ├── CreateDB.java           # Database initialisation
 │   ├── QueryDB.java            # Database queries
 │   ├── build.sh                # Setup and Test script
 │   └── sqljdbc/                # SQL Server JDBC driver
@@ -503,7 +503,13 @@ root/
 
 ## Project status
 
-This project had a short deadline and development was delayed due to other ongoing courseworks. I would have liked to implement cleaner, more modularised and user-friendly code. If time permits, I will return to this project, however, this will not contribute to the coursework grade.
+This project had a short deadline and development was delayed due to other ongoing courseworks. I would have liked to implement cleaner, more modularised and user-friendly code. If time permits, I will return to this project, however, this will not contribute to the coursework grade. \
+
+In future I would research:
+- Caching: Redis cache for frequent statistics
+- Circuit Breakers: Prevent cascade failures during high load
+- Message Queues: Azure Service Bus for better load leveling
+- Database Indexing: Optimise queries with proper indexes
 
 
 ## Reference Material

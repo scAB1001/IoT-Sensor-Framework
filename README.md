@@ -1,24 +1,27 @@
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue?logo=python&logoColor=white)](https://www.python.org/downloads/release/python-3120/)
+[![Java 21](https://img.shields.io/badge/Java-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/21/)
+[![Azure](https://img.shields.io/badge/Azure-0078D4?logo=microsoft-azure&logoColor=white)](https://azure.microsoft.com/)
+[![Azure Functions](https://img.shields.io/badge/Azure_Functions-0062AD?logo=azure-functions&logoColor=white)](https://azure.microsoft.com/en-us/products/functions/)
+[![SQL JDBC 12.8](https://img.shields.io/badge/SQL_JDBC-12.8-CC2927?logo=microsoft-sql-server&logoColor=white)](https://learn.microsoft.com/en-us/sql/connect/jdbc/microsoft-jdbc-driver-for-sql-server)
+[![Database Triggers](https://img.shields.io/badge/Database_Triggers-Enabled-4EAA25?logo=postgresql&logoColor=white)](https://learn.microsoft.com/en-us/sql/relational-databases/triggers/logon-triggers)
+[![Microsoft SQL Server](https://img.shields.io/badge/Microsoft_SQL_Server-CC2927?logo=microsoft-sql-server&logoColor=white)](https://www.microsoft.com/en-us/sql-server)
 
-# Internet of Things (IoT) Simulated Sensor Network (COMP3211 Coursework 2 - 2025)
+# Internet of Things (IoT) Simulated Sensor Network
 
+![IoT Simulation Demonstration](./assets/task_1.gif)
+
+Raw Text: `https://www.youtube.com/embed/Ts7zStJf9dw`
+Embedded link: [https://www.youtube.com/embed/Ts7zStJf9dw](https://www.youtube.com/embed/Ts7zStJf9dw) \
+
+**BSc Computer Science — COMP3211 Distributed Systems – Coursework 2**
+**University of Leeds, School of Computing, 2025/26**
+
+---
 
 ## Description
 
 The following README provides a guide to my COMP3211 Coursework 2 solution.
 The guide follows how I have implemented and performed the tasks.
-
-## Demonstration Video
-
-
-### Preview
-
-![IoT Simulation Demonstration](./assets/task_1.gif)
-
----
-
-Raw Text: `https://www.youtube.com/embed/Ts7zStJf9dw`
-Embedded link: [https://www.youtube.com/embed/Ts7zStJf9dw](https://www.youtube.com/embed/Ts7zStJf9dw) \
-
 
 ## Installation
 
@@ -45,6 +48,7 @@ DISTRIB_ID=Ubuntu
 DISTRIB_RELEASE=24.04
 DISTRIB_CODENAME=noble
 DISTRIB_DESCRIPTION="Ubuntu Noble Numbat"
+
 ```
 
 
@@ -102,7 +106,7 @@ Within the azfunc/ directory, a shell script, `setup.sh`, has been provided for 
 
 **Focused structural view**
 
-```text
+```bash
 root/
 ├── azfunc/
 │   ├── *.py                     # Python files
@@ -114,22 +118,23 @@ root/
 Run the following:
 
 ```bash
-# Ensure you are in the azure function directory
-cd ./azfunc/
+  # Ensure you are in the azure function directory
+  cd ./azfunc/
 
-# Make this file executable
-chmod +x ./setup.sh
+  # Make this file executable
+  chmod +x ./setup.sh
 
-# First, run the `check` command to verify dependencies
-./setup.sh check
+  # First, run the `check` command to verify dependencies
+  ./setup.sh check
 
-# Second, run the `init` command with source to initialise and activate the virtual environment
-source ./setup.sh init
-# Alternatively, run this after ./setup.sh init:
-source .venv/bin/activate
+  # Second, run the `init` command with source to initialise and activate the virtual environment
+  source ./setup.sh init
+  # Alternatively, run this after ./setup.sh init:
+  source .venv/bin/activate
 
-# Finally, run the `populate` command to install the requirements with pip
-/setup.sh populate
+  # Finally, run the `populate` command to install the requirements with pip
+  /setup.sh populate
+
 ```
 
 A successful example output can be seen below:
@@ -176,6 +181,7 @@ azure-functions    1.24.0
 
 # You should now see a ((.venv)) preceding your active terminal input line e.g.,
 ((.venv) ) andreas@Lenovo-V15-G4-AMN:~/github-projects/uni/comp3211/cwk-02/azfunc$
+
 ```
 
 
@@ -185,7 +191,7 @@ Within the java-db/ directory, a shell script, `build.sh`, has been provided for
 
 **Focused structural view**
 
-```text
+```bash
 root/
 ├── java-db/
 │   ├── *.java                   # Java source files
@@ -199,17 +205,17 @@ root/
 Run the following:
 
 ```bash
-# Ensure you are in the java database directory
-cd ./java-db/
+# # Ensure you are in the java database directory
+# cd ./java-db/
 
-# Make this file executable
-chmod +x ./build.sh
+# # Make this file executable
+# chmod +x ./build.sh
 
-# First, run the `check` command to verify dependencies
-./build.sh check
+# # First, run the `check` command to verify dependencies
+# ./build.sh check
 
-# Then, run the `exec` command to compile and execute `CreateDB.java`
-./build.sh exec CreateDB.java
+# # Then, run the `exec` command to compile and execute `CreateDB.java`
+# ./build.sh exec CreateDB.java
 ```
 
 A successful example output can be seen below:
@@ -255,7 +261,7 @@ Within the azfunc/ directory, a shell script, `exec.sh`, has been provided for s
 
 **Focused structural view**
 
-```text
+```bash
 root/
 ├── azfunc/
 │   ├── *.py                     # Python files
@@ -269,17 +275,17 @@ root/
 We must execute all tests under the same variables, within the same environment.
 
 ```bash
-# Ensure you are in the azure function directory
-cd ./azfunc/
+  # Ensure you are in the azure function directory
+  cd ./azfunc/
 
-# Make this file executable
-chmod +x ./exec.sh
+  # Make this file executable
+  chmod +x ./exec.sh
 
-# Check for required dependencies
-./exec.sh check
+  # Check for required dependencies
+  ./exec.sh check
 
-# Check the current status of the Azure Resources
-./exec.sh status
+  # Check the current status of the Azure Resources
+  ./exec.sh status
 ```
 
 A successful example output can be seen below:
@@ -387,8 +393,8 @@ We expect a function to generate data and then store it in our database.
 We will call the Data Simulation function.
 
 ```bash
-# Run task 1: Make a GET request to endpoint '/simulate-data', verify success
-./exec.sh task1
+  # Run task 1: Make a GET request to endpoint '/simulate-data', verify success
+  ./exec.sh task1
 ```
 
 A successful example output can be seen below:
@@ -400,8 +406,8 @@ We expect a function to retrieve existing data and then another to calculate its
 We will call the Data Statistics function.
 
 ```bash
-# Run task 2: Make a GET request to endpoint '/statistics', verify success
-./exec.sh task2
+  # Run task 2: Make a GET request to endpoint '/statistics', verify success
+  ./exec.sh task2
 ```
 
 A successful example output can be seen below:
@@ -429,11 +435,11 @@ For this task, you must uncomment and redeploy the code to Azure, so that the ne
 This task simply activates the schedule and enables the database change trigger on startup. This means that every *T* seconds.
 
 ```bash
-# Tests the chron schedule, redeploys, queries database, verifies regular intervals
-./exec.sh task3a
+  # Tests the chron schedule, redeploys, queries database, verifies regular intervals
+  ./exec.sh task3a
 
-# Tests the automatic database trigger and automatic statistics function
-./exec.sh task3b
+  # Tests the automatic database trigger and automatic statistics function
+  ./exec.sh task3b
 ```
 
 A successful example output can be seen below:
@@ -483,7 +489,7 @@ Connected to Azure SQL Database
 
 
 ### Project Structure
-```text
+```bash
 root/
 ├── azfunc/
 │   ├── function_app.py          # Main Azure Functions
@@ -525,12 +531,3 @@ In future I would research:
 - [5] Microsoft Learn. 2025. *Timer trigger for Azure Functions*. [Online]. [Accessed 18 November 2025]. Available from: [https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=python-v2%2Cisolated-process%2Cnodejs-v4&pivots=programming-language-python](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=python-v2%2Cisolated-process%2Cnodejs-v4&pivots=programming-language-python)
 
 - [6] Microsoft Learn. 2025. *Azure SQL trigger for Functions*. [Online]. [Accessed 18 November 2025]. Available from: [https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-azure-sql-trigger?tabs=isolated-process%2Cpython-v2%2Cportal&pivots=programming-language-python](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-azure-sql-trigger?tabs=isolated-process%2Cpython-v2%2Cportal&pivots=programming-language-python)
-
-
-
-
-
-
-
-
-

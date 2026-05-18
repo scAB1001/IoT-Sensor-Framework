@@ -1,10 +1,10 @@
 
-# Internet of Things (IoT) Simulated Sensor Network (COMP3811 Coursework 2 - 2025)
+# Internet of Things (IoT) Simulated Sensor Network (COMP3211 Coursework 2 - 2025)
 
 
 ## Description
 
-The following README provides a guide to my COMP3811 Coursework 2 solution.
+The following README provides a guide to my COMP3211 Coursework 2 solution.
 The guide follows how I have implemented and performed the tasks.
 
 ## Demonstration Video

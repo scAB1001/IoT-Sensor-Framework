@@ -1,19 +1,20 @@
+[![Azure Functions](https://img.shields.io/badge/Azure_Functions-0062AD?logo=azure-functions&logoColor=white)](https://azure.microsoft.com/en-us/products/functions/)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue?logo=python&logoColor=white)](https://www.python.org/downloads/release/python-3120/)
 [![Java 21](https://img.shields.io/badge/Java-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/21/)
-[![Azure](https://img.shields.io/badge/Azure-0078D4?logo=microsoft-azure&logoColor=white)](https://azure.microsoft.com/)
-[![Azure Functions](https://img.shields.io/badge/Azure_Functions-0062AD?logo=azure-functions&logoColor=white)](https://azure.microsoft.com/en-us/products/functions/)
 [![SQL JDBC 12.8](https://img.shields.io/badge/SQL_JDBC-12.8-CC2927?logo=microsoft-sql-server&logoColor=white)](https://learn.microsoft.com/en-us/sql/connect/jdbc/microsoft-jdbc-driver-for-sql-server)
-[![Database Triggers](https://img.shields.io/badge/Database_Triggers-Enabled-4EAA25?logo=postgresql&logoColor=white)](https://learn.microsoft.com/en-us/sql/relational-databases/triggers/logon-triggers)
 [![Microsoft SQL Server](https://img.shields.io/badge/Microsoft_SQL_Server-CC2927?logo=microsoft-sql-server&logoColor=white)](https://www.microsoft.com/en-us/sql-server)
+[![Database Triggers](https://img.shields.io/badge/Database_Triggers-Enabled-4EAA25?logo=postgresql&logoColor=white)](https://learn.microsoft.com/en-us/sql/relational-databases/triggers/logon-triggers)
 
 # Internet of Things (IoT) Simulated Sensor Network
 
 ![IoT Simulation Demonstration](./assets/task_1.gif)
 
 Raw Text: `https://www.youtube.com/embed/Ts7zStJf9dw`
-Embedded link: [https://www.youtube.com/embed/Ts7zStJf9dw](https://www.youtube.com/embed/Ts7zStJf9dw) \
+
+Embedded link: [https://www.youtube.com/embed/Ts7zStJf9dw](https://www.youtube.com/embed/Ts7zStJf9dw)
 
 **BSc Computer Science — COMP3211 Distributed Systems – Coursework 2**
+
 **University of Leeds, School of Computing, 2025/26**
 
 ---
